@@ -4,4 +4,4 @@
  
 ## Getting Started
 
-essa é uma nova versao em do:[Tomadeiro cordova](https://github.com/gvpassos/Tomadeiro), porem planejo aumentar as funcionalidades e implementar um codigo mais limpo e documentado 
+essa é uma nova versao em do: [Tomadeiro cordova](https://github.com/gvpassos/Tomadeiro), porem planejo aumentar as funcionalidades e implementar um codigo mais limpo e documentado 
