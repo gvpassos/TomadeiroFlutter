@@ -1,20 +1,6 @@
 import 'package:flutter/material.dart';
 
-class aba {
-  ///Classe para agrupar as ABAS do Software//
-  String nome;
-  Icon icone;
-
-  aba(this.nome, this.icone);
-}
-
-List<aba> titles = <aba>[
-  /// Todas as TELAS  com o icone///
-  aba('Tomadas', const Icon(Icons.outlet_outlined)),
-  aba('Disjuntores', const Icon(Icons.switch_camera)),
-  aba('Fios', const Icon(Icons.cable)),
-  aba('Historico', const Icon(Icons.history))
-];
+import 'telaTomada.dart';
 
 void main() => runApp(const Tomadeiro());
 
@@ -31,6 +17,15 @@ class Tomadeiro extends StatelessWidget {
   }
 }
 
+List<StatefulWidget> abas = <StatefulWidget>[
+  /// Todas as TELAS  com o icone///
+
+  const telaTomada(),
+  const telaTomada(),
+  const telaTomada(),
+  const telaTomada(),
+];
+
 class AppBarExample extends StatelessWidget {
   const AppBarExample({super.key});
 
@@ -38,10 +33,10 @@ class AppBarExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       initialIndex: 1,
-      length: titles.length,
+      length: abas.length,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Criador de Listas Para eletricistas'),
+          title: const Text('Criador de Listas para Eletricistas'),
           notificationPredicate: (ScrollNotification notification) {
             return notification.depth == 1;
           },
@@ -49,34 +44,29 @@ class AppBarExample extends StatelessWidget {
           // scrolled underneath the app bar.
           scrolledUnderElevation: 4.0,
           shadowColor: Theme.of(context).shadowColor,
-          bottom: TabBar(
+          bottom: const TabBar(
             tabs: <Widget>[
               Tab(
-                icon: titles[0].icone,
-                text: titles[0].nome,
+                icon: Icon(Icons.outlet_outlined),
+                text: 'Tomadas',
               ),
               Tab(
-                icon: titles[1].icone,
-                text: titles[1].nome,
+                icon: Icon(Icons.outlet_outlined),
+                text: 'Disjuntores',
               ),
               Tab(
-                icon: titles[2].icone,
-                text: titles[2].nome,
+                icon: Icon(Icons.outlet_outlined),
+                text: 'Fios',
               ),
               Tab(
-                icon: titles[3].icone,
-                text: titles[3].nome,
+                icon: Icon(Icons.outlet_outlined),
+                text: 'historico',
               ),
             ],
           ),
         ),
         body: TabBarView(
-          children: <Widget>[
-            Center(child: Text(titles[0].nome)),
-            Center(child: Text(titles[1].nome)),
-            Center(child: Text(titles[2].nome)),
-            Center(child: Text(titles[3].nome)),
-          ],
+          children: <Widget>[abas[0], abas[1], abas[2], abas[3]],
         ),
       ),
     );
