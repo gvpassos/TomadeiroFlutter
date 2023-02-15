@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tomadeiro/telaDisjuntor.dart';
 
 import 'telaTomada.dart';
 
@@ -10,8 +11,7 @@ class Tomadeiro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-          colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true),
+      theme: ThemeData(primarySwatch: Colors.grey),
       home: const AppBarExample(),
     );
   }
@@ -21,7 +21,7 @@ List<StatefulWidget> abas = <StatefulWidget>[
   /// Todas as TELAS  com o icone///
 
   const telaTomada(),
-  const telaTomada(),
+  const telaDisjuntor(),
   const telaTomada(),
   const telaTomada(),
 ];
@@ -51,7 +51,7 @@ class AppBarExample extends StatelessWidget {
                 text: 'Tomadas',
               ),
               Tab(
-                icon: Icon(Icons.outlet_outlined),
+                icon: Icon(Icons.switch_camera_outlined),
                 text: 'Disjuntores',
               ),
               Tab(
