@@ -1,4 +1,22 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+
+//Class de Tomada
+class ponto {
+  List<String> modulos = [];
+  ponto(this.modulos);
+
+  exibir() {
+    return Text('$modulos');
+  }
+}
+
+//Lista de modulos
+List<String> modulos = [];
+
+//Lista de Pontos
+List<ponto> listaPontos = [];
 
 class telaTomada extends StatefulWidget {
   final String nome;
@@ -9,18 +27,11 @@ class telaTomada extends StatefulWidget {
     this.nome = 'Tomadas',
     this.icone = const Icon(Icons.outlet_outlined),
   });
-
-  String getNome() {
-    return nome;
-  }
-
   @override
   State<telaTomada> createState() => _telaTomada();
 }
 
 class _telaTomada extends State<telaTomada> {
-  List<Container> modulos = [];
-
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -156,29 +167,79 @@ class _telaTomada extends State<telaTomada> {
           )
         ],
       ),
+      Row(
+        children: [
+          const SizedBox(
+            width: 55,
+          ),
+          ElevatedButton(
+              onPressed: adicionarPonto, child: const Text("Adicionar")),
+          const SizedBox(
+            width: 15,
+          ),
+          ElevatedButton(onPressed: limparPonto, child: const Text("Remover")),
+          const SizedBox(
+            width: 15,
+          ),
+          ElevatedButton(onPressed: () {}, child: const Text("Compartilhar")),
+        ],
+      ),
+      ultimodaLista(),
     ]);
   }
 
+  //se a lLista de Pontos nao estiver vazia ela exibi a ultima insercao
+  ultimodaLista() {
+    if (listaPontos.isEmpty) {
+      return const Text('Lista Vazia');
+    } else {
+      return listaPontos.last.exibir();
+    }
+  }
+
+  /// RECARRECA e Exibi as insercoes do ponto na tela
   carregarmodulo() {
     if (modulos.isEmpty) {
       return const Text('adicione modulos ao lado ');
     } else {
-      return Column(children: modulos);
+      List<Container> tmpLista = [];
+      for (var item in modulos) {
+        tmpLista.add(Container(
+            width: 200,
+            height: 87.5,
+            decoration: BoxDecoration(
+              border: Border.all(color: Color.fromARGB(255, 15, 107, 153)),
+              borderRadius: const BorderRadius.all(Radius.circular(1)),
+            ),
+            child: Center(child: Text(item))));
+      }
+      ;
+      return Column(children: tmpLista);
     }
   }
 
   adicionarModulo(String mod) {
     if (modulos.length < 3) {
-      modulos.add(Container(
-          width: 200,
-          height: 87.5,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color.fromARGB(255, 15, 107, 153)),
-            borderRadius: const BorderRadius.all(Radius.circular(1)),
-          ),
-          child: Center(child: Text(mod))));
+      modulos.add(mod);
     } else {
       ///Limite de 3
     }
+  }
+
+  // Funcao para limpar o ponto
+  // Limpar o array modulo
+  limparPonto() {
+    setState(() {
+      modulos = [];
+    });
+  }
+
+  // Funcao para mover o ponto para a lista final
+  // Limpar o array modulo
+  adicionarPonto() {
+    listaPontos.add(ponto(modulos));
+    setState(() {
+      modulos = [];
+    });
   }
 }
