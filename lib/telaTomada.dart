@@ -1,14 +1,34 @@
-import 'dart:ffi';
+import 'dart:io';
 
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'package:collection/collection.dart';
+
+import 'listaNome.dart';
 
 //Class de Tomada
 class ponto {
   List<String> modulos = [];
+  int quant = 1;
+  String nomeExibicao = "";
+
   ponto(this.modulos);
 
+  finalizarAdicao() {
+    for (var nome in listaNomes) {
+      if (const ListEquality().equals(nome.getModulos(), modulos)) {
+        nomeExibicao = nome.Nome;
+      }
+    }
+    if (nomeExibicao == "") {
+      nomeExibicao = modulos.toString();
+    }
+  }
+
   exibir() {
-    return Text('$modulos');
+    return Text('$nomeExibicao: $quant unidade');
   }
 }
 
@@ -32,6 +52,9 @@ class telaTomada extends StatefulWidget {
 }
 
 class _telaTomada extends State<telaTomada> {
+  //armazena o ultimo ponto para exibir em um alinha no final da tela
+  late ponto ultimo;
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -172,16 +195,20 @@ class _telaTomada extends State<telaTomada> {
           const SizedBox(
             width: 55,
           ),
+          /* Botao que adiciona o ponto na Lista de Pontos*/
           ElevatedButton(
               onPressed: adicionarPonto, child: const Text("Adicionar")),
           const SizedBox(
             width: 15,
           ),
+          /* Botao para limpar os pontos colocados na tela*/
           ElevatedButton(onPressed: limparPonto, child: const Text("Remover")),
           const SizedBox(
             width: 15,
           ),
-          ElevatedButton(onPressed: () {}, child: const Text("Compartilhar")),
+          /* Botao de Compartilhamento das Listas */
+          ElevatedButton(
+              onPressed: compartilharLista, child: const Text("Compartilhar")),
         ],
       ),
       ultimodaLista(),
@@ -193,17 +220,23 @@ class _telaTomada extends State<telaTomada> {
     if (listaPontos.isEmpty) {
       return const Text('Lista Vazia');
     } else {
-      return listaPontos.last.exibir();
+      // ignore: unnecessary_null_comparison
+      if (ultimo == null) {
+        return listaPontos.last.exibir();
+      } else {
+        return ultimo.exibir();
+      }
     }
   }
 
-  /// RECARRECA e Exibi as insercoes do ponto na tela
+  /*RECARRECA e Exibi as insercoes do ponto na tela*/
   carregarmodulo() {
     if (modulos.isEmpty) {
       return const Text('adicione modulos ao lado ');
     } else {
       List<Container> tmpLista = [];
-      for (var item in modulos) {
+
+      for (var index = 0; index < modulos.length; index++) {
         tmpLista.add(Container(
             width: 200,
             height: 87.5,
@@ -211,19 +244,30 @@ class _telaTomada extends State<telaTomada> {
               border: Border.all(color: Color.fromARGB(255, 15, 107, 153)),
               borderRadius: const BorderRadius.all(Radius.circular(1)),
             ),
-            child: Center(child: Text(item))));
+            child: TextButton(
+                onPressed: () {
+                  removerPonto(index);
+                },
+                child: Center(child: Text(modulos.elementAt(index))))));
       }
-      ;
       return Column(children: tmpLista);
     }
   }
 
+  //adiciona o modulo a array de modulos
   adicionarModulo(String mod) {
     if (modulos.length < 3) {
       modulos.add(mod);
     } else {
       ///Limite de 3
     }
+  }
+
+  /* Funcao para remover um ponto especifico adicionado na lista */
+  removerPonto(int pos) {
+    setState(() {
+      modulos.removeAt(pos);
+    });
   }
 
   // Funcao para limpar o ponto
@@ -237,9 +281,51 @@ class _telaTomada extends State<telaTomada> {
   // Funcao para mover o ponto para a lista final
   // Limpar o array modulo
   adicionarPonto() {
-    listaPontos.add(ponto(modulos));
+    bool novaentrada = true;
+    if (listaPontos.isNotEmpty) {
+      for (var p in listaPontos) {
+        if (const ListEquality().equals(p.modulos, modulos)) {
+          p.quant++;
+          novaentrada = false;
+          ultimo = p;
+        }
+      }
+    }
+    if (novaentrada) {
+      listaPontos.add(ponto(modulos));
+      listaPontos.last.finalizarAdicao();
+      ultimo = listaPontos.last;
+    }
     setState(() {
       modulos = [];
     });
+  }
+
+  compartilharLista() async {
+    //Create a new PDF document
+    PdfDocument document = PdfDocument();
+
+    //Add a new page and draw text
+    document.pages.add().graphics.drawString(
+        'Hello World!', PdfStandardFont(PdfFontFamily.helvetica, 20),
+        brush: PdfSolidBrush(PdfColor(0, 0, 0)),
+        bounds: const Rect.fromLTWH(0, 0, 500, 50));
+
+    //Save the document
+    List<int> bytes = await document.save();
+
+    final directory = await getApplicationSupportDirectory();
+    final path = directory.path;
+    File file = File('$path/Output.pdf');
+
+    await file.writeAsBytes(bytes, flush: true);
+
+    print(file.path);
+
+    // ignore: deprecated_member_use
+    Share.shareFiles([file.path]);
+
+    //Dispose the document
+    document.dispose();
   }
 }
