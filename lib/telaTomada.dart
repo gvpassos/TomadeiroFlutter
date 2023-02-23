@@ -54,6 +54,7 @@ class telaTomada extends StatefulWidget {
 class _telaTomada extends State<telaTomada> {
   //armazena o ultimo ponto para exibir em um alinha no final da tela
   late ponto ultimo;
+  TextEditingController controleNomedoArquivo = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -302,36 +303,37 @@ class _telaTomada extends State<telaTomada> {
   }
 
   compartilharLista() async {
-    //Create a new PDF document
+    //Criar novo PDF document
     PdfDocument document = PdfDocument();
 
-    //Create a PdfGrid class
+    //Criar a PdfGrid
     PdfGrid grid = PdfGrid();
 
-    //Add the columns to the grid
+    //Adicionando as cabeçalho para o grid
     grid.columns.add(count: 2);
 
-    //Add header to the grid
+    //Adicionando as cabeçalho para o grid
     grid.headers.add(1);
-
-    //Add the rows to the grid
     PdfGridRow header = grid.headers[0];
     header.cells[0].value = 'Nome';
     header.cells[1].value = 'Quantidade';
 
+    //configurando o style do cabeçalho
     header.style = PdfGridCellStyle(
-        cellPadding: PdfPaddings(left: 2, right: 3, top: 4, bottom: 5),
-        backgroundBrush: PdfBrushes.dimGray,
-        textBrush: PdfBrushes.black,
-        font: PdfStandardFont(PdfFontFamily.timesRoman, 30));
+      cellPadding: PdfPaddings(left: 2, right: 3, top: 4, bottom: 5),
+      backgroundBrush: PdfBrushes.dimGray,
+      textBrush: PdfBrushes.black,
+      font: PdfStandardFont(PdfFontFamily.timesRoman, 30,
+          style: PdfFontStyle.bold),
+    );
 
-    //Add rows to grid
+    //Adicionando as Linhas para o grid
     for (int cont = 0; cont < listaPontos.length; cont++) {
       PdfGridRow row = grid.rows.add();
       row.cells[0].value = listaPontos[cont].nomeExibicao;
       row.cells[1].value = listaPontos[cont].quant.toString();
 
-      //Set the grid style
+      //configurando o style
       PdfBrush corLinha =
           cont % 2 == 0 ? PdfBrushes.lightGray : PdfBrushes.white;
 
@@ -342,22 +344,53 @@ class _telaTomada extends State<telaTomada> {
           font: PdfStandardFont(PdfFontFamily.timesRoman, 25));
     }
 
-    //Draw the grid
+    //desenhar a tabela
     grid.draw(
         page: document.pages.add(), bounds: const Rect.fromLTWH(0, 0, 0, 0));
-    //Save the document
-    List<int> bytes = await document.save();
 
+    //Salvar o documento
+    List<int> bytes = await document.save();
     final directory = await getApplicationSupportDirectory();
     final path = directory.path;
-    File file = File('$path/Lista de materiais.pdf');
+
+    await obterNome(
+        context); //Chama um dialogo para cadastrar o nome do arquivo
+    String nome = controleNomedoArquivo.text;
+    File file = File('$path/$nome.pdf'); // Local onde sera salvo o documento
 
     await file.writeAsBytes(bytes, flush: true);
+
+    /// armazenar na memoria
 
     // ignore: deprecated_member_use
     Share.shareFiles([file.path]);
 
     //Dispose the document
     document.dispose();
+  }
+
+//Input para pegar o nome do Arquivo usando na funcao de compartilhamento
+  Future<void> obterNome(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Digite o Nome para o PDF:'),
+            content: TextField(
+              controller: controleNomedoArquivo,
+              decoration: const InputDecoration(hintText: "Lista de Materiais"),
+            ),
+            actions: [
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
   }
 }

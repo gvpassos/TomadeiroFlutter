@@ -113,8 +113,12 @@ class _telaDisjuntor extends State<telaDisjuntor> {
       ),
       Row(
         children: [
+          const SizedBox(
+            width: 35,
+            height: 5,
+          ),
           Container(
-              margin: const EdgeInsets.all(40.0),
+              margin: const EdgeInsets.all(15.0),
               child: ElevatedButton(
                   onPressed: () {
                     setState(() {
@@ -122,9 +126,12 @@ class _telaDisjuntor extends State<telaDisjuntor> {
                     });
                   },
                   child: const Text("Adicionar"))),
-          const SizedBox(width: 15),
+          const SizedBox(
+            width: 85,
+            height: 5,
+          ),
           Container(
-              margin: const EdgeInsets.all(40.0),
+              margin: const EdgeInsets.all(15.0),
               child: ElevatedButton(
                   onPressed: () {
                     setState(() {
@@ -137,7 +144,7 @@ class _telaDisjuntor extends State<telaDisjuntor> {
       const Text("Lista de Disjuntores"),
       Container(
         padding: const EdgeInsets.all(10.0),
-        margin: const EdgeInsets.all(5.0),
+        margin: const EdgeInsets.all(1.0),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.blueGrey),
           borderRadius: const BorderRadius.all(Radius.circular(15)),
@@ -147,18 +154,27 @@ class _telaDisjuntor extends State<telaDisjuntor> {
         clipBehavior: Clip.hardEdge,
         child: SingleChildScrollView(child: carregarDisjuntores()),
       ),
+      Container(
+          margin: const EdgeInsets.all(20.0),
+          child: ElevatedButton(
+              onPressed: () {
+                setState(() {});
+              },
+              child: const Text("Compartilhar"))),
     ]);
   }
 
   adicionarDisjuntor() {
     var naoInserido = true;
     for (var element in listaDisjuntores) {
+      //Aumenta a quantidade se ja estiver na lista
       if (element.amper == amperValor && element.polar == polarValor) {
         element.quant += int.tryParse(quantController.text)!;
         naoInserido = false;
       }
     }
     if (naoInserido) {
+      //Nova entrada na lista
       listaDisjuntores.add(
           disjuntor(polarValor, amperValor, int.parse(quantController.text)));
     }
