@@ -305,22 +305,54 @@ class _telaTomada extends State<telaTomada> {
     //Create a new PDF document
     PdfDocument document = PdfDocument();
 
-    //Add a new page and draw text
-    document.pages.add().graphics.drawString(
-        'Hello World!', PdfStandardFont(PdfFontFamily.helvetica, 20),
-        brush: PdfSolidBrush(PdfColor(0, 0, 0)),
-        bounds: const Rect.fromLTWH(0, 0, 500, 50));
+    //Create a PdfGrid class
+    PdfGrid grid = PdfGrid();
 
+    //Add the columns to the grid
+    grid.columns.add(count: 2);
+
+    //Add header to the grid
+    grid.headers.add(1);
+
+    //Add the rows to the grid
+    PdfGridRow header = grid.headers[0];
+    header.cells[0].value = 'Nome';
+    header.cells[1].value = 'Quantidade';
+
+    header.style = PdfGridCellStyle(
+        cellPadding: PdfPaddings(left: 2, right: 3, top: 4, bottom: 5),
+        backgroundBrush: PdfBrushes.dimGray,
+        textBrush: PdfBrushes.black,
+        font: PdfStandardFont(PdfFontFamily.timesRoman, 30));
+
+    //Add rows to grid
+    for (int cont = 0; cont < listaPontos.length; cont++) {
+      PdfGridRow row = grid.rows.add();
+      row.cells[0].value = listaPontos[cont].nomeExibicao;
+      row.cells[1].value = listaPontos[cont].quant.toString();
+
+      //Set the grid style
+      PdfBrush corLinha =
+          cont % 2 == 0 ? PdfBrushes.lightGray : PdfBrushes.white;
+
+      grid.style = PdfGridStyle(
+          cellPadding: PdfPaddings(left: 2, right: 2, top: 4, bottom: 5),
+          backgroundBrush: corLinha,
+          textBrush: PdfBrushes.black,
+          font: PdfStandardFont(PdfFontFamily.timesRoman, 25));
+    }
+
+    //Draw the grid
+    grid.draw(
+        page: document.pages.add(), bounds: const Rect.fromLTWH(0, 0, 0, 0));
     //Save the document
     List<int> bytes = await document.save();
 
     final directory = await getApplicationSupportDirectory();
     final path = directory.path;
-    File file = File('$path/Output.pdf');
+    File file = File('$path/Lista de materiais.pdf');
 
     await file.writeAsBytes(bytes, flush: true);
-
-    print(file.path);
 
     // ignore: deprecated_member_use
     Share.shareFiles([file.path]);
