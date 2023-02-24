@@ -45,14 +45,14 @@ class _telaHistorico extends State<telaHistorico> {
             child: FutureBuilder(
                 future: gerarLista(),
                 builder: (context, snapshot) {
+                  var coluna = <Widget>[];
                   if (snapshot.hasData) {
-                    print(snapshot.data);
-                    return const Center(
-                      child: Text(
-                        'oiii',
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-                    );
+                    for (var element in snapshot.requireData) {
+                      var texto = element.split('/files/')[1].split('.pdf')[0];
+                      coluna.add(Text(texto));
+                      print(texto);
+                    }
+                    return Column(children: coluna);
                   } else {
                     return const Center(
                       child: CircularProgressIndicator(),
