@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tomadeiro/historico.dart';
 import 'package:tomadeiro/telaDisjuntor.dart';
 
 import 'telaTomada.dart';
@@ -11,7 +12,7 @@ class Tomadeiro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.grey),
+      theme: ThemeData(primarySwatch: Colors.blueGrey),
       home: const AppBarExample(),
     );
   }
@@ -23,7 +24,7 @@ List<StatefulWidget> abas = <StatefulWidget>[
   const telaTomada(),
   const telaDisjuntor(),
   const telaTomada(),
-  const telaTomada(),
+  const telaHistorico(),
 ];
 
 class AppBarExample extends StatelessWidget {
@@ -32,7 +33,7 @@ class AppBarExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: abas.length,
       child: Scaffold(
         appBar: AppBar(
@@ -60,7 +61,7 @@ class AppBarExample extends StatelessWidget {
               ),
               Tab(
                 icon: Icon(Icons.outlet_outlined),
-                text: 'historico',
+                text: 'Historico',
               ),
             ],
           ),
