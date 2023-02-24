@@ -53,7 +53,7 @@ class telaTomada extends StatefulWidget {
 
 class _telaTomada extends State<telaTomada> {
   //armazena o ultimo ponto para exibir em um alinha no final da tela
-  late ponto ultimo;
+  ponto? ultimo;
   TextEditingController controleNomedoArquivo = TextEditingController();
 
   @override
@@ -217,15 +217,14 @@ class _telaTomada extends State<telaTomada> {
   }
 
   //se a lLista de Pontos nao estiver vazia ela exibi a ultima insercao
-  ultimodaLista() {
+  Widget ultimodaLista() {
     if (listaPontos.isEmpty) {
       return const Text('Lista Vazia');
     } else {
-      // ignore: unnecessary_null_comparison
       if (ultimo == null) {
-        return listaPontos.last.exibir();
+        return const Text('Lista Vazia');
       } else {
-        return ultimo.exibir();
+        return ultimo!.exibir();
       }
     }
   }
@@ -335,7 +334,7 @@ class _telaTomada extends State<telaTomada> {
 
       //configurando o style
       PdfBrush corLinha =
-          cont % 2 == 0 ? PdfBrushes.lightGray : PdfBrushes.white;
+          cont % 2 == 0 ? PdfBrushes.white : PdfBrushes.lightGray;
 
       grid.style = PdfGridStyle(
           cellPadding: PdfPaddings(left: 2, right: 2, top: 4, bottom: 5),
@@ -351,19 +350,18 @@ class _telaTomada extends State<telaTomada> {
     //Salvar o documento
     List<int> bytes = await document.save();
     final directory = await getApplicationSupportDirectory();
-    final path = directory.path;
 
     await obterNome(
         context); //Chama um dialogo para cadastrar o nome do arquivo
-    String nome = controleNomedoArquivo.text;
-    File file = File('$path/$nome.pdf'); // Local onde sera salvo o documento
 
+    File file = File(
+        '${directory.path}/${controleNomedoArquivo.text}.pdf'); // Local onde sera salvo o documento
     await file.writeAsBytes(bytes, flush: true);
 
     /// armazenar na memoria
 
     // ignore: deprecated_member_use
-    Share.shareFiles([file.path]);
+    Share.shareXFiles([XFile(file.path)]);
 
     //Dispose the document
     document.dispose();

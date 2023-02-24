@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:io' as io;
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class telaHistorico extends StatefulWidget {
   final String nome;
@@ -35,24 +36,18 @@ class _telaHistorico extends State<telaHistorico> {
       ),
       Container(
         margin: EdgeInsets.all(15),
-        width: 350,
+        width: 400,
         height: 390,
         decoration: BoxDecoration(
           border: Border.all(color: Color.fromARGB(255, 73, 122, 146)),
           borderRadius: const BorderRadius.all(Radius.circular(15)),
         ),
-        child: Container(
+        child: SingleChildScrollView(
             child: FutureBuilder(
                 future: gerarLista(),
                 builder: (context, snapshot) {
-                  var coluna = <Widget>[];
                   if (snapshot.hasData) {
-                    for (var element in snapshot.requireData) {
-                      var texto = element.split('/files/')[1].split('.pdf')[0];
-                      coluna.add(Text(texto));
-                      print(texto);
-                    }
-                    return Column(children: coluna);
+                    return Column(children: snapshot.requireData);
                   } else {
                     return const Center(
                       child: CircularProgressIndicator(),
@@ -64,16 +59,95 @@ class _telaHistorico extends State<telaHistorico> {
   }
 
 //Buscar os arquivos na pasta do app
-  Future<List<String>> gerarLista() async {
+  Future<List<Widget>> gerarLista() async {
     //Obetendo a Lista de aqruivos
     Directory directory = await getApplicationSupportDirectory();
     List<FileSystemEntity> files = directory.listSync();
 
-    List<String> listaArquivos = [];
+    List<Widget> listaArquivos = [];
     for (var file in files) {
-      listaArquivos.add(file.path);
+      var texto = file.path.split('/').last.split('.pdf').first;
+      listaArquivos.add(Container(
+        decoration: const BoxDecoration(
+            border: Border(
+                bottom: BorderSide(
+                    width: 1.0, color: Color.fromARGB(255, 73, 122, 146)))),
+        child: Row(
+          children: [
+            Container(
+              width: 280,
+              padding: const EdgeInsets.only(top: 10),
+              child: Text(
+                texto,
+                style: const TextStyle(fontSize: 30),
+              ),
+            ),
+            IconButton(
+              ///Botao de compatilhar
+              onPressed: () {
+                compartilharPDF(file.path);
+              },
+              icon: const Icon(
+                Icons.share,
+                color: Colors.black54,
+                size: 30.0,
+              ),
+            ),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    deletarPDF(file.path);
+                  });
+                },
+                icon: const Icon(
+                  Icons.delete_forever_sharp,
+                  color: Colors.black54,
+                  size: 30.0,
+                )),
+          ],
+        ),
+      ));
     }
 
     return listaArquivos;
+  }
+
+  compartilharPDF(String path) async {
+    Share.shareXFiles([XFile(path)]);
+  }
+
+  deletarPDF(String path) async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Digite o Nome para o PDF:'),
+            content: Text(
+                "voce realmente deseja deletar o arquivo ${path.split('/').last}"),
+            actions: [
+              TextButton(
+                child: const Text('Não'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              TextButton(
+                child: const Text('Sim'),
+                onPressed: () {
+                  try {
+                    File(path).delete();
+                  } catch (e) {
+                    print(e);
+                  }
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
   }
 }
