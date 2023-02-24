@@ -310,12 +310,13 @@ class _telaTomada extends State<telaTomada> {
 
     //Adicionando as cabeçalho para o grid
     grid.columns.add(count: 2);
+    grid.columns[0].width = 400;
 
     //Adicionando as cabeçalho para o grid
     grid.headers.add(1);
     PdfGridRow header = grid.headers[0];
     header.cells[0].value = 'Nome';
-    header.cells[1].value = 'Quantidade';
+    header.cells[1].value = 'Quant.';
 
     //configurando o style do cabeçalho
     header.style = PdfGridCellStyle(

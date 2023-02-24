@@ -1,10 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class disjuntor {
   String polar, amper;
   int quant;
   disjuntor(this.polar, this.amper, this.quant);
+
+  String nomeExibicao() {
+    return 'Disjuntor $polar de $amper Amperes';
+  }
 }
 
 class telaDisjuntor extends StatefulWidget {
@@ -43,6 +51,9 @@ class _telaDisjuntor extends State<telaDisjuntor> {
   //Controlador input
   TextEditingController quantController = TextEditingController(text: '1');
 
+  //Controle para recuperar o nome do alert
+  TextEditingController controleNomedoArquivo = TextEditingController();
+
   Widget build(BuildContext context) {
     return Column(children: [
       Row(
@@ -55,10 +66,10 @@ class _telaDisjuntor extends State<telaDisjuntor> {
               value: polarValor,
               icon: const Icon(Icons.arrow_downward),
               elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
+              style: const TextStyle(color: Colors.black87),
               underline: Container(
                 height: 2,
-                color: Colors.deepPurpleAccent,
+                color: Colors.black87,
               ),
               onChanged: (String? value) {
                 setState(() {
@@ -81,10 +92,10 @@ class _telaDisjuntor extends State<telaDisjuntor> {
               value: amperValor,
               icon: const Icon(Icons.arrow_downward),
               elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
+              style: const TextStyle(color: Colors.black87),
               underline: Container(
                 height: 2,
-                color: Colors.deepPurpleAccent,
+                color: Colors.black87,
               ),
               onChanged: (String? value) {
                 // This is called when the user selects an item.
@@ -141,7 +152,10 @@ class _telaDisjuntor extends State<telaDisjuntor> {
                   child: const Text("Limpar"))),
         ],
       ),
-      const Text("Lista de Disjuntores"),
+      const Text(
+        "Lista de Disjuntores",
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+      ),
       Container(
         padding: const EdgeInsets.all(10.0),
         margin: const EdgeInsets.all(1.0),
@@ -157,10 +171,7 @@ class _telaDisjuntor extends State<telaDisjuntor> {
       Container(
           margin: const EdgeInsets.all(20.0),
           child: ElevatedButton(
-              onPressed: () {
-                setState(() {});
-              },
-              child: const Text("Compartilhar"))),
+              onPressed: compartilharLista, child: const Text("Compartilhar"))),
     ]);
   }
 
@@ -212,5 +223,97 @@ class _telaDisjuntor extends State<telaDisjuntor> {
     setState(() {
       //listaDisjuntores[pos].quant -= 1;
     });
+  }
+
+  compartilharLista() async {
+    //Criar novo PDF document
+    PdfDocument document = PdfDocument();
+
+    //Criar a PdfGrid
+    PdfGrid grid = PdfGrid();
+
+    //Adicionando as cabeçalho para o grid
+    grid.columns.add(count: 2);
+    grid.columns[0].width = 400;
+
+    //Adicionando as cabeçalho para o grid
+    grid.headers.add(1);
+    PdfGridRow header = grid.headers[0];
+    header.cells[0].value = 'Nome';
+    header.cells[1].value = 'Quant.';
+
+    //configurando o style do cabeçalho
+    header.style = PdfGridCellStyle(
+      cellPadding: PdfPaddings(left: 2, right: 3, top: 4, bottom: 5),
+      backgroundBrush: PdfBrushes.dimGray,
+      textBrush: PdfBrushes.black,
+      font: PdfStandardFont(PdfFontFamily.timesRoman, 30,
+          style: PdfFontStyle.bold),
+    );
+
+    //Adicionando as Linhas para o grid
+    for (int cont = 0; cont < listaDisjuntores.length; cont++) {
+      PdfGridRow row = grid.rows.add();
+      row.cells[0].value = listaDisjuntores[cont].nomeExibicao();
+      row.cells[1].value = listaDisjuntores[cont].quant.toString();
+
+      //configurando o style
+      PdfBrush corLinha =
+          cont % 2 == 0 ? PdfBrushes.white : PdfBrushes.lightGray;
+
+      grid.style = PdfGridStyle(
+          cellPadding: PdfPaddings(left: 2, right: 2, top: 4, bottom: 5),
+          backgroundBrush: corLinha,
+          textBrush: PdfBrushes.black,
+          font: PdfStandardFont(PdfFontFamily.timesRoman, 25));
+    }
+
+    //desenhar a tabela
+    grid.draw(
+        page: document.pages.add(), bounds: const Rect.fromLTWH(0, 0, 0, 0));
+
+    //Salvar o documento
+    List<int> bytes = await document.save();
+    final directory = await getApplicationSupportDirectory();
+
+    await obterNome(
+        context); //Chama um dialogo para cadastrar o nome do arquivo
+
+    File file = File(
+        '${directory.path}/${controleNomedoArquivo.text}.pdf'); // Local onde sera salvo o documento
+    await file.writeAsBytes(bytes, flush: true);
+
+    /// armazenar na memoria
+
+    // ignore: deprecated_member_use
+    Share.shareXFiles([XFile(file.path)]);
+
+    //Dispose the document
+    document.dispose();
+  }
+
+  //Input para pegar o nome do Arquivo usando na funcao de compartilhamento
+  Future<void> obterNome(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Digite o Nome para o PDF:'),
+            content: TextField(
+              controller: controleNomedoArquivo,
+              decoration: const InputDecoration(hintText: "Lista de Materiais"),
+            ),
+            actions: [
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
   }
 }
