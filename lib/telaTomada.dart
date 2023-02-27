@@ -56,6 +56,8 @@ class _telaTomada extends State<telaTomada> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData responsive;
+    responsive = MediaQuery.of(context);
     return Column(children: [
       Row(
         children: <Widget>[
@@ -66,11 +68,11 @@ class _telaTomada extends State<telaTomada> {
                 border: Border.all(color: Colors.blueGrey),
                 borderRadius: const BorderRadius.all(Radius.circular(15)),
               ),
-              width: 200.0,
+              width: responsive.size.width * 0.5,
               height: 300.0,
               child: carregarmodulo()),
           SizedBox(
-            width: 200.0,
+            width: responsive.size.width * 0.4,
             height: 300.0,
             child: Column(
               children: [
@@ -191,23 +193,33 @@ class _telaTomada extends State<telaTomada> {
       ),
       Row(
         children: [
-          const SizedBox(
-            width: 55,
+          SizedBox(
+            width: responsive.size.width * 0.05,
           ),
           /* Botao que adiciona o ponto na Lista de Pontos*/
-          ElevatedButton(
-              onPressed: adicionarPonto, child: const Text("Adicionar")),
-          const SizedBox(
-            width: 15,
+          SizedBox(
+            width: responsive.size.width * 0.3,
+            child: ElevatedButton(
+                onPressed: adicionarPonto, child: const Text("Adicionar")),
+          ),
+          SizedBox(
+            width: responsive.size.width * 0.01,
           ),
           /* Botao para limpar os pontos colocados na tela*/
-          ElevatedButton(onPressed: limparPonto, child: const Text("Remover")),
-          const SizedBox(
-            width: 15,
+          SizedBox(
+              width: responsive.size.width * 0.3,
+              child: ElevatedButton(
+                  onPressed: limparPonto, child: const Text("Remover"))),
+          SizedBox(
+            width: responsive.size.width * 0.01,
           ),
           /* Botao de Compartilhamento das Listas */
-          ElevatedButton(
-              onPressed: compartilharLista, child: const Text("Compartilhar")),
+          SizedBox(
+            width: responsive.size.width * 0.3,
+            child: ElevatedButton(
+                onPressed: compartilharLista,
+                child: const Text("Compartilhar")),
+          ),
         ],
       ),
       ultimodaLista(),
