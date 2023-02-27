@@ -23,8 +23,8 @@ List<nomesModulos> listaNomes = [
 
   //Tomadas 20A
   nomesModulos('Tomada 20A Simples', ['Tomada 20A']),
-  nomesModulos('Tomada Dupla', ['Tomada 20A', 'Tomada 20A']),
-  nomesModulos('Tomada tripla', ['Tomada 20A', 'Tomada 20A', 'Tomada 20A']),
+  nomesModulos('Tomada 20A Dupla', ['Tomada 20A', 'Tomada 20A']),
+  nomesModulos('Tomada 20A tripla', ['Tomada 20A', 'Tomada 20A', 'Tomada 20A']),
 
   // Interruptor Simples 1,2 e 3 Teclas
   nomesModulos('Interruptor Simples 1 Tecla', ['Interruptor']),
@@ -174,5 +174,5 @@ List<nomesModulos> listaNomes = [
       ['Tomada20A', 'interruptor', 'interruptor']),
 
 //Tampa cega
-  nomesModulos('Tampa Cega', ['tampacega', 'tampacega', 'tampacega']),
+  nomesModulos('Tampa Cega', ['Tampa Cega', 'Tampa Cega', 'Tampa Cega']),
 ];

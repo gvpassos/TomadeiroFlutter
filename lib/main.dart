@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tomadeiro/historico.dart';
 import 'package:tomadeiro/telaDisjuntor.dart';
+import 'package:tomadeiro/telaFios.dart';
 
 import 'telaTomada.dart';
 
@@ -25,7 +26,7 @@ List<StatefulWidget> abas = <StatefulWidget>[
 
   const telaTomada(),
   const telaDisjuntor(),
-  const telaTomada(),
+  const telaFios(),
   const telaHistorico(),
 ];
 

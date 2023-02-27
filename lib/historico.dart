@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'dart:io' as io;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -25,15 +24,6 @@ class _telaHistorico extends State<telaHistorico> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Text(
-        'Historico',
-        style: TextStyle(
-          fontFamily: 'timesRoman',
-          fontSize: 21,
-          color: Color.fromARGB(255, 4, 23, 39),
-          fontWeight: FontWeight.bold,
-        ),
-      ),
       Container(
         margin: EdgeInsets.all(15),
         width: 400,

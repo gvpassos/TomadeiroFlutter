@@ -1,51 +1,63 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:tomadeiro/compartilhar.dart';
 
-import 'compartilhar.dart';
-
-class disjuntor extends objeto {
-  String polar, amper;
+class Fios extends objeto {
+  String cor, diametro, tipo;
   int quant;
-  disjuntor(this.polar, this.amper, this.quant);
+
+  Fios(this.cor, this.diametro, this.tipo, this.quant);
 
   String nomeExibicao() {
-    return 'Disjuntor $polar de $amper Amperes';
+    String plural = quant > 1 ? '${tipo}s' : tipo;
+    return 'Fio de $diametro mm da $cor : $quant $plural ';
   }
 }
 
-class telaDisjuntor extends StatefulWidget {
+class telaFios extends StatefulWidget {
   final String nome;
   final Icon icone;
 
-  const telaDisjuntor({
+  const telaFios({
     super.key,
-    this.nome = 'Disjuntor',
+    this.nome = 'Fios',
     this.icone = const Icon(Icons.outlet_outlined),
   });
   @override
-  State<telaDisjuntor> createState() => _telaDisjuntor();
+  State<telaFios> createState() => _telaFios();
 }
 
-class _telaDisjuntor extends State<telaDisjuntor> {
+class _telaFios extends State<telaFios> {
   // Quantidade de polos numa chave
-  static const List<String> polar = <String>['Monopolar', 'Bipolar'];
-  String polarValor = polar.first;
+  static const List<String> cor = <String>[
+    'Azul',
+    'Amarelo',
+    'Branco',
+    'Marron',
+    'Preto',
+    'Verde',
+    'Vermelho',
+  ];
+  String corValor = cor.first;
   // Amperagem do Disjuntor
-  static const List<String> amper = <String>[
+  static const List<String> diametroFio = <String>[
+    '1,5',
+    '2,5',
+    '4',
+    '6',
     '10',
     '16',
-    '20',
-    '25',
-    '32',
-    '40',
-    '50',
-    '63'
   ];
-  String amperValor = amper.first;
+  String diametroFioValor = diametroFio.first;
 
+  static const List<String> tipo = <String>[
+    'Metro',
+    'Rolo',
+  ];
+  String tipoValor = tipo.first;
   // Lista de Disjuntores
-  List<disjuntor> listaDisjuntores = [];
+  List<Fios> listaFios = [];
 
   //Controlador input
   TextEditingController quantController = TextEditingController(text: '1');
@@ -53,47 +65,44 @@ class _telaDisjuntor extends State<telaDisjuntor> {
   //Controle para recuperar o nome do alert
   TextEditingController controleNomedoArquivo = TextEditingController();
 
+  @override
   Widget build(BuildContext context) {
     return Column(children: [
-      /// Menu para cadastrar o Dijuntor
-      Row(
-        children: [
-          Container(
-            width: 120,
-            height: 30,
+      //Menu para cadastrar o fio
+      Row(children: [
+        Container(
+            padding: EdgeInsets.only(top: 9),
+            width: 89,
             alignment: Alignment.bottomCenter,
-            child: const Text('Quant de polos:'),
-          ),
-          Container(
-            width: 90,
-            height: 30,
+            child: const Text("Cor:")),
+        Container(
+            padding: EdgeInsets.only(top: 9),
+            width: 80,
             alignment: Alignment.bottomCenter,
-            child: const Text('Ampers:'),
-          ),
-          Container(
+            child: const Text("Diametro:")),
+        Container(
+            padding: EdgeInsets.only(top: 9),
             width: 100,
-            height: 30,
             alignment: Alignment.bottomCenter,
-            child: const Text('Quantidade:'),
-          ),
-        ],
-      ),
+            child: const Text("Quantidade:")),
+      ]),
       Row(
         children: [
           Container(
-            width: 120,
+            width: 95,
             alignment: Alignment.topCenter,
+            padding: EdgeInsets.only(left: 10),
             child: DropdownButton<String>(
-              value: polarValor,
+              value: corValor,
               icon: const Icon(Icons.arrow_downward),
               elevation: 16,
               style: const TextStyle(color: Colors.black87),
               onChanged: (String? value) {
                 setState(() {
-                  polarValor = value!;
+                  corValor = value!;
                 });
               },
-              items: polar.map<DropdownMenuItem<String>>((String value) {
+              items: cor.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -102,20 +111,20 @@ class _telaDisjuntor extends State<telaDisjuntor> {
             ),
           ),
           Container(
-            width: 90,
-            alignment: Alignment.bottomCenter,
+            width: 80,
+            alignment: Alignment.topCenter,
             child: DropdownButton<String>(
-              value: amperValor,
+              value: diametroFioValor,
               icon: const Icon(Icons.arrow_downward),
               elevation: 16,
               style: const TextStyle(color: Colors.black87),
               onChanged: (String? value) {
                 // This is called when the user selects an item.
                 setState(() {
-                  amperValor = value!;
+                  diametroFioValor = value!;
                 });
               },
-              items: amper.map<DropdownMenuItem<String>>((String value) {
+              items: diametroFio.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -125,15 +134,39 @@ class _telaDisjuntor extends State<telaDisjuntor> {
           ),
           Container(
             padding: const EdgeInsets.only(left: 20),
-            width: 90,
+            width: 80,
             height: 30,
             child: TextField(
               controller: quantController,
               keyboardType: TextInputType.number,
             ),
           ),
+          Container(
+            // TIPO DE QUANTIDADE
+            padding: EdgeInsets.only(left: 5),
+            width: 90,
+            alignment: Alignment.topCenter,
+            child: DropdownButton<String>(
+              value: tipoValor,
+              icon: const Icon(Icons.arrow_downward),
+              elevation: 16,
+              style: const TextStyle(color: Colors.black87),
+              onChanged: (String? value) {
+                setState(() {
+                  tipoValor = value!;
+                });
+              },
+              items: tipo.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+          ),
         ],
       ),
+
       Row(
         children: [
           const SizedBox(
@@ -145,7 +178,7 @@ class _telaDisjuntor extends State<telaDisjuntor> {
               child: ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      adicionarDisjuntor();
+                      adicionarFios();
                     });
                   },
                   child: const Text("Adicionar"))),
@@ -157,16 +190,14 @@ class _telaDisjuntor extends State<telaDisjuntor> {
               margin: const EdgeInsets.all(15.0),
               child: ElevatedButton(
                   onPressed: () {
-                    setState(() {
-                      limparDisjuntor();
-                    });
+                    limparFios();
                   },
                   child: const Text("Limpar"))),
         ],
       ),
 
       const Text(
-        "Lista de Disjuntores",
+        "Lista de Fios",
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
       ),
       Container(
@@ -179,7 +210,7 @@ class _telaDisjuntor extends State<telaDisjuntor> {
         width: 500.0,
         height: 250.0,
         clipBehavior: Clip.hardEdge,
-        child: SingleChildScrollView(child: carregarDisjuntores()),
+        child: SingleChildScrollView(child: carregarFios()),
       ),
       Container(
           margin: const EdgeInsets.all(20.0),
@@ -188,54 +219,50 @@ class _telaDisjuntor extends State<telaDisjuntor> {
     ]);
   }
 
-  adicionarDisjuntor() {
+  Widget carregarFios() {
+    List<TextButton> exibirFios = [];
+    for (var cont = 0; cont < listaFios.length; cont++) {
+      var element = listaFios[cont];
+      var plural = element.quant > 1 ? 's' : '';
+      exibirFios.add(TextButton(
+          onPressed: () {
+            diminiurQuant(cont);
+          },
+          child: Text(
+            element.nomeExibicao(),
+            style: const TextStyle(color: Colors.black),
+          )));
+    }
+    return Column(
+      children: exibirFios,
+    );
+  }
+
+  diminiurQuant(int pos) {
+    /// diminuir a Quantidade de fios ao tocar no item
+    listaFios[pos].quant--;
+  }
+
+  adicionarFios() {
     var naoInserido = true;
-    for (var element in listaDisjuntores) {
+    for (var element in listaFios) {
       //Aumenta a quantidade se ja estiver na lista
-      if (element.amper == amperValor && element.polar == polarValor) {
+      if (element.cor == corValor &&
+          element.diametro == diametroFioValor &&
+          element.tipo == tipoValor) {
         element.quant += int.tryParse(quantController.text)!;
         naoInserido = false;
       }
     }
     if (naoInserido) {
       //Nova entrada na lista
-      listaDisjuntores.add(
-          disjuntor(polarValor, amperValor, int.parse(quantController.text)));
+      listaFios.add(Fios(corValor, diametroFioValor, tipoValor,
+          int.parse(quantController.text)));
     }
   }
 
-  limparDisjuntor() {
-    //showAboutDialog(context: null);
-  }
-
-  carregarDisjuntores() {
-    List<TextButton> exibirDisjuntores = [];
-    for (var cont = 0; cont < listaDisjuntores.length; cont++) {
-      var element = listaDisjuntores[cont];
-      var aux = '';
-      if (element.quant == 1) {
-        aux =
-            'Disjuntor ${element.polar} de ${element.amper} Ampers : ${element.quant} unidade';
-      } else {
-        aux =
-            'Disjuntores ${element.polar} de ${element.amper} Ampers: ${element.quant} unidades';
-      }
-      exibirDisjuntores.add(TextButton(
-          onPressed: diminiurQuant(cont),
-          child: Text(
-            aux,
-            style: TextStyle(color: Colors.black),
-          )));
-    }
-    return Column(
-      children: exibirDisjuntores,
-    );
-  }
-
-  diminiurQuant(int pos) {
-    setState(() {
-      //listaDisjuntores[pos].quant -= 1;
-    });
+  limparFios() {
+    listaFios = [];
   }
 
   compartilharLista() async {
@@ -243,8 +270,7 @@ class _telaDisjuntor extends State<telaDisjuntor> {
         controleNomedoArquivo); //Chama um dialogo para cadastrar o nome do arquivo
 
     //Criar PDF
-    if (controleNomedoArquivo.text.isNotEmpty) {}
-    File file = await criarPDF(listaDisjuntores, controleNomedoArquivo.text);
+    File file = await criarPDF(listaFios, controleNomedoArquivo.text);
 
     //compartilhar
     compartilhador(file);

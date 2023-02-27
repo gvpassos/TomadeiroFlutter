@@ -1,34 +1,32 @@
 import 'dart:io';
 
-import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:collection/collection.dart';
+import 'package:tomadeiro/compartilhar.dart';
 
 import 'listaNome.dart';
 
 //Class de Tomada
-class ponto {
+class ponto extends objeto {
   List<String> modulos = [];
-  int quant = 1;
-  String nomeExibicao = "";
+  String nome = "";
 
   ponto(this.modulos);
 
   finalizarAdicao() {
-    for (var nome in listaNomes) {
-      if (const ListEquality().equals(nome.getModulos(), modulos)) {
-        nomeExibicao = nome.Nome;
+    for (var item in listaNomes) {
+      if (const ListEquality().equals(item.getModulos(), modulos)) {
+        nome = item.Nome;
       }
     }
-    if (nomeExibicao == "") {
-      nomeExibicao = modulos.toString();
+    if (nome == "") {
+      nome = modulos.toString();
     }
   }
 
-  exibir() {
-    return Text('$nomeExibicao: $quant unidade');
+  @override
+  String nomeExibicao() {
+    return '$nome: $quant unidade';
   }
 }
 
@@ -53,7 +51,7 @@ class telaTomada extends StatefulWidget {
 
 class _telaTomada extends State<telaTomada> {
   //armazena o ultimo ponto para exibir em um alinha no final da tela
-  ponto? ultimo;
+  ponto ultimo = ponto(['Lista Vazia']);
   TextEditingController controleNomedoArquivo = TextEditingController();
 
   @override
@@ -221,11 +219,7 @@ class _telaTomada extends State<telaTomada> {
     if (listaPontos.isEmpty) {
       return const Text('Lista Vazia');
     } else {
-      if (ultimo == null) {
-        return const Text('Lista Vazia');
-      } else {
-        return ultimo!.exibir();
-      }
+      return Text(listaPontos.last.nomeExibicao());
     }
   }
 
@@ -241,7 +235,8 @@ class _telaTomada extends State<telaTomada> {
             width: 200,
             height: 87.5,
             decoration: BoxDecoration(
-              border: Border.all(color: Color.fromARGB(255, 15, 107, 153)),
+              border:
+                  Border.all(color: const Color.fromARGB(255, 15, 107, 153)),
               borderRadius: const BorderRadius.all(Radius.circular(1)),
             ),
             child: TextButton(
@@ -256,10 +251,50 @@ class _telaTomada extends State<telaTomada> {
 
   //adiciona o modulo a array de modulos
   adicionarModulo(String mod) {
+    /// SE for precionado Tampa Cega é necessario que o ponto esteja vazio
+    if (mod == 'Tampa Cega' && modulos.isEmpty) {
+      modulos = ['Tampa Cega', 'Tampa Cega', 'Tampa Cega'];
+      return null;
+    }
+    // SE NÃO estiver vazio ele nao será adicionado
+    else if (mod == 'Tampa Cega') {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                title: const Text('ERRO !'),
+                content: const Text(
+                    'Não é possivel adicionar mais de 3 Modulos em um Ponto'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Ok')),
+                ]);
+          });
+      return null;
+    }
+
+    /// Limite de 3 por ponto
     if (modulos.length < 3) {
       modulos.add(mod);
     } else {
-      ///Limite de 3
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                title: const Text('ERRO !'),
+                content: const Text(
+                    'Não é possivel adicionar mais de 3 Modulos em um Ponto'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Ok')),
+                ]);
+          });
     }
   }
 
@@ -302,94 +337,13 @@ class _telaTomada extends State<telaTomada> {
   }
 
   compartilharLista() async {
-    //Criar novo PDF document
-    PdfDocument document = PdfDocument();
+    await obterNome(context,
+        controleNomedoArquivo); //Chama um dialogo para cadastrar o nome do arquivo
 
-    //Criar a PdfGrid
-    PdfGrid grid = PdfGrid();
+    File pdf = await criarPDF(listaPontos, controleNomedoArquivo.text);
 
-    //Adicionando as cabeçalho para o grid
-    grid.columns.add(count: 2);
-    grid.columns[0].width = 400;
-
-    //Adicionando as cabeçalho para o grid
-    grid.headers.add(1);
-    PdfGridRow header = grid.headers[0];
-    header.cells[0].value = 'Nome';
-    header.cells[1].value = 'Quant.';
-
-    //configurando o style do cabeçalho
-    header.style = PdfGridCellStyle(
-      cellPadding: PdfPaddings(left: 2, right: 3, top: 4, bottom: 5),
-      backgroundBrush: PdfBrushes.dimGray,
-      textBrush: PdfBrushes.black,
-      font: PdfStandardFont(PdfFontFamily.timesRoman, 30,
-          style: PdfFontStyle.bold),
-    );
-
-    //Adicionando as Linhas para o grid
-    for (int cont = 0; cont < listaPontos.length; cont++) {
-      PdfGridRow row = grid.rows.add();
-      row.cells[0].value = listaPontos[cont].nomeExibicao;
-      row.cells[1].value = listaPontos[cont].quant.toString();
-
-      //configurando o style
-      PdfBrush corLinha =
-          cont % 2 == 0 ? PdfBrushes.white : PdfBrushes.lightGray;
-
-      grid.style = PdfGridStyle(
-          cellPadding: PdfPaddings(left: 2, right: 2, top: 4, bottom: 5),
-          backgroundBrush: corLinha,
-          textBrush: PdfBrushes.black,
-          font: PdfStandardFont(PdfFontFamily.timesRoman, 25));
-    }
-
-    //desenhar a tabela
-    grid.draw(
-        page: document.pages.add(), bounds: const Rect.fromLTWH(0, 0, 0, 0));
-
-    //Salvar o documento
-    List<int> bytes = await document.save();
-    final directory = await getApplicationSupportDirectory();
-
-    await obterNome(
-        context); //Chama um dialogo para cadastrar o nome do arquivo
-
-    File file = File(
-        '${directory.path}/${controleNomedoArquivo.text}.pdf'); // Local onde sera salvo o documento
-    await file.writeAsBytes(bytes, flush: true);
-
-    /// armazenar na memoria
-
-    // ignore: deprecated_member_use
-    Share.shareXFiles([XFile(file.path)]);
-
-    //Dispose the document
-    document.dispose();
+    compartilhador(pdf);
   }
 
 //Input para pegar o nome do Arquivo usando na funcao de compartilhamento
-  Future<void> obterNome(BuildContext context) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Digite o Nome para o PDF:'),
-            content: TextField(
-              controller: controleNomedoArquivo,
-              decoration: const InputDecoration(hintText: "Lista de Materiais"),
-            ),
-            actions: [
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  setState(() {
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-            ],
-          );
-        });
-  }
 }
