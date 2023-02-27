@@ -20,9 +20,12 @@ class telaHistorico extends StatefulWidget {
 class _telaHistorico extends State<telaHistorico> {
   late String directory;
   List file = [];
+  MediaQueryData responsive = MediaQueryData();
 
   @override
   Widget build(BuildContext context) {
+    responsive = MediaQuery.of(context);
+
     return Column(children: [
       Container(
         margin: EdgeInsets.all(15),
@@ -65,9 +68,10 @@ class _telaHistorico extends State<telaHistorico> {
         child: Row(
           children: [
             Container(
-              width: 280,
+              width: responsive.size.width * 0.75,
               padding: const EdgeInsets.only(top: 10),
               child: Text(
+                /// Arquivo Armazenado na memoria
                 texto,
                 style: const TextStyle(fontSize: 30),
               ),

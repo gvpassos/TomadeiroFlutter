@@ -6,3 +6,6 @@
 
 essa é uma nova versao em do: [Tomadeiro cordova](https://github.com/gvpassos/Tomadeiro), porém planejo aumentar as funcionalidades e implementar um código mais limpo e documentado.
 
+
+
+interfaces 
