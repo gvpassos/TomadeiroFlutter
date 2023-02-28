@@ -355,6 +355,7 @@ class _telaTomada extends State<telaTomada> {
     File pdf = await criarPDF(listaPontos, controleNomedoArquivo.text);
 
     compartilhador(pdf);
+    listaPontos.clear();
   }
 
 //Input para pegar o nome do Arquivo usando na funcao de compartilhamento

@@ -248,5 +248,6 @@ class _telaDisjuntor extends State<telaDisjuntor> {
 
     //compartilhar
     compartilhador(file);
+    listaDisjuntores.clear();
   }
 }

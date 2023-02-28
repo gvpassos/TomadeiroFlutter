@@ -274,5 +274,6 @@ class _telaFios extends State<telaFios> {
 
     //compartilhar
     compartilhador(file);
+    listaFios.clear();
   }
 }

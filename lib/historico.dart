@@ -68,7 +68,7 @@ class _telaHistorico extends State<telaHistorico> {
         child: Row(
           children: [
             Container(
-              width: responsive.size.width * 0.75,
+              width: responsive.size.width * 0.60,
               padding: const EdgeInsets.only(top: 10),
               child: Text(
                 /// Arquivo Armazenado na memoria

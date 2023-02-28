@@ -51,7 +51,7 @@ List<nomesModulos> listaNomes = [
   nomesModulos('Interruptor Paralelo 1 Tecla e Tomada Simples conjugada',
       ['Tomada', 'Interruptor Paralelo']),
 
-////Interruptor Simples 2 Teclas e Tomada Simples conjugada
+//Interruptor Simples 2 Teclas e Tomada Simples conjugada
   nomesModulos('Interruptor Simples 2 Teclas e Tomada Simples conjugada',
       ['Interruptor', 'Interruptor', 'Tomada']),
   nomesModulos('Interruptor Simples 2 Teclas e Tomada Simples conjugada',
@@ -59,7 +59,7 @@ List<nomesModulos> listaNomes = [
   nomesModulos('Interruptor Simples 2 Teclas e Tomada Simples conjugada',
       ['Tomada', 'Interruptor', 'Interruptor']),
 
-  //Interruptor Interruptor Paralelo 2 Tecla e Tomada Simples conjugada
+  //Interruptor Paralelo 2 Tecla e Tomada Simples conjugada
   nomesModulos('Interruptor Paralelo 2 Teclas e Tomada Simples conjugada',
       ['Interruptor Paralelo', 'Interruptor Paralelo', 'Tomada']),
   nomesModulos('Interruptor Paralelo 2 Teclas e Tomada Simples conjugada',
@@ -135,25 +135,23 @@ List<nomesModulos> listaNomes = [
 
   nomesModulos(
       'Tomada Simples e Tomada 20A conjugada', ['Tomada20A', 'Tomada']),
-
   nomesModulos(
       'Tomada Simples e Tomada 20A conjugada', ['Tomada', 'Tomada20A']),
-//Interruptor Simples e Tomada 20A conjugada
 
+//Interruptor Interruptor simples e Tomada 20A conjugada
   nomesModulos('Interruptor Simples e Tomada 20A conjugada',
       ['Tomada20A', 'interruptor']),
-
   nomesModulos('Interruptor Simples e Tomada 20A conjugada',
       ['interruptor', 'Tomada20A']),
-//Interruptor Interruptor Paralelo e Tomada 20A conjugada
 
+//Interruptor Interruptor Paralelo e Tomada 20A conjugada
   nomesModulos('Interruptor Interruptor Paralelo e Tomada 20A conjugada',
       ['Tomada20A', 'Interruptor Paralelo']),
 
   nomesModulos('Interruptor Interruptor Paralelo e Tomada 20A conjugada',
       ['Interruptor Paralelo', 'Tomada20A']),
-//Interruptor Simples 2 Teclas e Tomada 20A
 
+//Interruptor Simples 2 Teclas e Tomada 20A
   nomesModulos('Interruptor Simples 2 Teclas e Tomada 20A conjugada',
       ['interruptor', 'interruptor', 'Tomada20A']),
 
