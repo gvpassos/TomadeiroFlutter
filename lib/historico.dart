@@ -115,11 +115,11 @@ class _telaHistorico extends State<telaHistorico> {
 
   abrirPDF(String path) async {
     try {
-      print('${path.split('user/0').last}');
-      OpenFilex.open('/storage/emulated/Android${path.split('user/0').last}');
-      //DynamicLibrary.open('/storage/13F4-3108/Android${path.split('user/0').last}');
-      //ProcessResult result = await Process.run('open', ['/storage/13F4-3108/Android${path.split('user/0').last}']);
-      //'/storage/13F4-3108/Android
+      print('/storage/emulated/0/Android${path.split('user/0').last}');
+
+
+      OpenFilex.open('/storage/emulated/0/Android${path.split('user/0').last}');
+
     } catch (e) {
       print(e);
     }
