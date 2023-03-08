@@ -26,7 +26,10 @@ class ponto extends objeto {
 
   @override
   String nomeExibicao() {
-    return '$nome: $quant unidade';
+    return '$nome';
+  }
+  String nomeQuantExibicao() {
+    return '$nome : $quant Unidades';
   }
 }
 
@@ -203,7 +206,7 @@ class _telaTomada extends State<telaTomada> {
                 onPressed: adicionarPonto, child: const Text("Adicionar")),
           ),
           SizedBox(
-            width: responsive.size.width * 0.01,
+            width: responsive.size.width * 0.02,
           ),
           /* Botao para limpar os pontos colocados na tela*/
           SizedBox(
@@ -211,11 +214,11 @@ class _telaTomada extends State<telaTomada> {
               child: ElevatedButton(
                   onPressed: limparPonto, child: const Text("Remover"))),
           SizedBox(
-            width: responsive.size.width * 0.01,
+            width: responsive.size.width * 0.02,
           ),
           /* Botao de Compartilhamento das Listas */
           SizedBox(
-              width: responsive.size.width * 0.4,
+              width: responsive.size.width * 0.3,
               child: ElevatedButton(
                 onPressed: compartilharLista,
                 child: const Text("Compartilhar"),
@@ -226,12 +229,12 @@ class _telaTomada extends State<telaTomada> {
     ]);
   }
 
-  //se a lLista de Pontos nao estiver vazia ela exibi a ultima insercao
+  //se a Lista de Pontos nao estiver vazia ela exibi a ultima insercao
   Widget ultimodaLista() {
     if (listaPontos.isEmpty) {
       return const Text('Lista Vazia');
     } else {
-      return Text(listaPontos.last.nomeExibicao());
+      return Text(listaPontos.last.nomeQuantExibicao());
     }
   }
 

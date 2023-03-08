@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:open_filex/open_filex.dart';
 
 class telaHistorico extends StatefulWidget {
   final String nome;
@@ -64,16 +66,17 @@ class _telaHistorico extends State<telaHistorico> {
         decoration: const BoxDecoration(
             border: Border(
                 bottom: BorderSide(
-                    width: 1.0, color: Color.fromARGB(255, 73, 122, 146)))),
+                    width: 0.80, color: Color.fromARGB(255, 73, 122, 146)))),
         child: Row(
           children: [
             Container(
-              width: responsive.size.width * 0.60,
-              padding: const EdgeInsets.only(top: 10),
-              child: Text(
+              width: 250,
+              child: TextButton(
                 /// Arquivo Armazenado na memoria
-                texto,
-                style: const TextStyle(fontSize: 30),
+                child: Text(texto, style: const TextStyle(fontSize: 20)),
+                onPressed: () {
+                  abrirPDF(file.path);
+                },
               ),
             ),
             IconButton(
@@ -82,7 +85,7 @@ class _telaHistorico extends State<telaHistorico> {
                 compartilharPDF(file.path);
               },
               icon: const Icon(
-                Icons.share,
+                Icons.share_sharp,
                 color: Colors.black54,
                 size: 30.0,
               ),
@@ -108,6 +111,18 @@ class _telaHistorico extends State<telaHistorico> {
 
   compartilharPDF(String path) async {
     Share.shareXFiles([XFile(path)]);
+  }
+
+  abrirPDF(String path) async {
+    try {
+      print('${path.split('user/0').last}');
+      OpenFilex.open('/storage/emulated/Android${path.split('user/0').last}');
+      //DynamicLibrary.open('/storage/13F4-3108/Android${path.split('user/0').last}');
+      //ProcessResult result = await Process.run('open', ['/storage/13F4-3108/Android${path.split('user/0').last}']);
+      //'/storage/13F4-3108/Android
+    } catch (e) {
+      print(e);
+    }
   }
 
   deletarPDF(String path) async {
