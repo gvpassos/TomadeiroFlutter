@@ -98,7 +98,7 @@ Future<File> criarPDF(List<objeto> listaStrings, String nomeArquivo) async {
 
   //Salvar o documento
   List<int> bytes = await document.save();
-  final directory = await getApplicationSupportDirectory();
+  final directory = await getApplicationDocumentsDirectory();
 
   File file = File(
       '${directory.path}/$nomeArquivo.pdf'); // Local onde sera salvo o documento

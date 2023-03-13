@@ -10,6 +10,11 @@ class Fios extends objeto {
   Fios(this.cor, this.diametro, this.tipo, this.quant);
 
   String nomeExibicao() {
+    final nomeacao= tipo == 'metro' ? 'Cabo' : 'Fio';
+    final plural = quant > 1 ? '${tipo}s' : tipo;
+    return '$nomeacao de $diametro mm da $cor';
+  }
+  String nomeExibicaoCompleto() {
     String plural = quant > 1 ? '${tipo}s' : tipo;
     return 'Fio de $diametro mm da $cor : $quant $plural ';
   }
@@ -190,7 +195,9 @@ class _telaFios extends State<telaFios> {
               margin: const EdgeInsets.all(15.0),
               child: ElevatedButton(
                   onPressed: () {
-                    limparFios();
+                    setState(() {
+                      limparFios();
+                    });
                   },
                   child: const Text("Limpar"))),
         ],
@@ -212,6 +219,14 @@ class _telaFios extends State<telaFios> {
         clipBehavior: Clip.hardEdge,
         child: SingleChildScrollView(child: carregarFios()),
       ),
+    Checkbox(
+        checkColor: Colors.white,
+        fillColor: MaterialStateProperty.resolveWith(getColor),
+        value: isChecked,
+        onChanged: (bool? value) {
+        setState(() {
+        isChecked = value!;
+        }),
       Container(
           margin: const EdgeInsets.all(20.0),
           child: ElevatedButton(
@@ -226,7 +241,9 @@ class _telaFios extends State<telaFios> {
       var plural = element.quant > 1 ? 's' : '';
       exibirFios.add(TextButton(
           onPressed: () {
-            diminiurQuant(cont);
+            setState(() {
+              diminiurQuant(cont);
+            });
           },
           child: Text(
             element.nomeExibicao(),

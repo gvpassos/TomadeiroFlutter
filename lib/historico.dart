@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class telaHistorico extends StatefulWidget {
   final String nome;
@@ -56,7 +56,7 @@ class _telaHistorico extends State<telaHistorico> {
 //Buscar os arquivos na pasta do app
   Future<List<Widget>> gerarLista() async {
     //Obetendo a Lista de aqruivos
-    Directory directory = await getApplicationSupportDirectory();
+    Directory directory = await getApplicationDocumentsDirectory();
     List<FileSystemEntity> files = directory.listSync();
 
     List<Widget> listaArquivos = [];
@@ -70,7 +70,7 @@ class _telaHistorico extends State<telaHistorico> {
         child: Row(
           children: [
             Container(
-              width: 250,
+              width: 225,
               child: TextButton(
                 /// Arquivo Armazenado na memoria
                 child: Text(texto, style: const TextStyle(fontSize: 20)),
@@ -114,14 +114,14 @@ class _telaHistorico extends State<telaHistorico> {
   }
 
   abrirPDF(String path) async {
-    try {
-      print('/storage/emulated/0/Android${path.split('user/0').last}');
+    final file = File(path);
+    final isExists = await file.exists();
 
-
-      OpenFilex.open('/storage/emulated/0/Android${path.split('user/0').last}');
-
-    } catch (e) {
-      print(e);
+    if (isExists) {
+      final url = Uri.file(path);
+      await launchUrl(url );
+    } else {
+      // Handle file not exists error
     }
   }
 

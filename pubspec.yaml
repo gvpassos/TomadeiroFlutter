@@ -39,7 +39,7 @@ dependencies:
   social_share: ^2.3.1
   share_plus: ^6.3.1
   syncfusion_flutter_pdf: ^20.4.50
-  open_filex: ^4.3.2
+  url_launcher: ^6.0.3
 
 dev_dependencies:
   flutter_test:
