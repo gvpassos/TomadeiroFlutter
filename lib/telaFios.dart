@@ -10,14 +10,16 @@ class Fios extends objeto {
   Fios(this.cor, this.diametro, this.tipo, this.quant);
 
   String nomeExibicao() {
-    final nomeacao= tipo == 'metro' ? 'Cabo' : 'Fio';
-    final plural = quant > 1 ? '${tipo}s' : tipo;
-    return '$nomeacao de $diametro mm da $cor';
+    return 'Cabo Flexivel de ${diametro}mm ${cor}';
   }
   String nomeExibicaoCompleto() {
     String plural = quant > 1 ? '${tipo}s' : tipo;
-    return 'Fio de $diametro mm da $cor : $quant $plural ';
+    return '${nomeExibicao()}: $quant $plural';
   }
+  String gerarQuant(){
+    return '${quant.toString()} ${quant > 1 ? '${tipo}s' : tipo }';
+  }
+
 }
 
 class telaFios extends StatefulWidget {
@@ -69,9 +71,13 @@ class _telaFios extends State<telaFios> {
 
   //Controle para recuperar o nome do alert
   TextEditingController controleNomedoArquivo = TextEditingController();
+  TextEditingController isolanteControle = TextEditingController();
 
+  //Incluir Isolante
+  bool teraIsolante = false;
   @override
   Widget build(BuildContext context) {
+
     return Column(children: [
       //Menu para cadastrar o fio
       Row(children: [
@@ -215,18 +221,23 @@ class _telaFios extends State<telaFios> {
           borderRadius: const BorderRadius.all(Radius.circular(15)),
         ),
         width: 500.0,
-        height: 250.0,
+        height: 230.0,
         clipBehavior: Clip.hardEdge,
         child: SingleChildScrollView(child: carregarFios()),
       ),
-    Checkbox(
-        checkColor: Colors.white,
-        fillColor: MaterialStateProperty.resolveWith(getColor),
-        value: isChecked,
-        onChanged: (bool? value) {
-        setState(() {
-        isChecked = value!;
-        }),
+    Row(
+      children:[ Checkbox(
+          checkColor: Colors.white,
+          value: teraIsolante,
+            onChanged: (bool? value) {
+              setState(() {
+                teraIsolante = value!;
+              });
+            }
+        ),
+        incluirIsolante()
+      ]
+    ),
       Container(
           margin: const EdgeInsets.all(20.0),
           child: ElevatedButton(
@@ -246,7 +257,7 @@ class _telaFios extends State<telaFios> {
             });
           },
           child: Text(
-            element.nomeExibicao(),
+            element.nomeExibicaoCompleto(),
             style: const TextStyle(color: Colors.black),
           )));
     }
@@ -257,7 +268,11 @@ class _telaFios extends State<telaFios> {
 
   diminiurQuant(int pos) {
     /// diminuir a Quantidade de fios ao tocar no item
-    listaFios[pos].quant--;
+    if(listaFios[pos].quant > 1){
+      listaFios[pos].quant--;
+    }else {
+      listaFios.removeAt(pos);
+    }
   }
 
   adicionarFios() {
@@ -292,5 +307,26 @@ class _telaFios extends State<telaFios> {
     //compartilhar
     compartilhador(file);
     listaFios.clear();
+  }
+
+  Widget incluirIsolante(){
+    if(teraIsolante){
+      return Container(
+        padding: const EdgeInsets.only(left: 20),
+        width: 80,
+        height: 30,
+        child: TextField(
+          controller: isolanteControle,
+          keyboardType: TextInputType.number,
+        ),
+      );
+    }else {
+      return Container(
+        padding: const EdgeInsets.only(left: 20),
+        width: 180,
+        height: 30,
+        child: const Text('incluir isolante'),
+      );
+    }
   }
 }

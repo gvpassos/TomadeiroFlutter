@@ -28,8 +28,11 @@ class ponto extends objeto {
   String nomeExibicao() {
     return '$nome';
   }
+  String gerarQuant(){
+    return "${quant.toString()} ${quant >1 ? 'Unidades' : 'Unidade' }";
+  }
   String nomeQuantExibicao() {
-    return '$nome : $quant Unidades';
+    return '$nome : ${gerarQuant()}';
   }
 }
 

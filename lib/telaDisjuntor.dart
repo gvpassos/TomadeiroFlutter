@@ -12,6 +12,9 @@ class disjuntor extends objeto {
   String nomeExibicao() {
     return 'Disjuntor $polar de $amper Amperes';
   }
+  String gerarQuant(){
+    return quant.toString();
+  }
 }
 
 class telaDisjuntor extends StatefulWidget {
