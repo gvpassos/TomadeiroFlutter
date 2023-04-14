@@ -302,7 +302,7 @@ class _telaFios extends State<telaFios> {
         controleNomedoArquivo); //Chama um dialogo para cadastrar o nome do arquivo
 
     //Criar PDF
-    File file = await criarPDF(listaFios, controleNomedoArquivo.text);
+    File file = await criarPDFFios(listaFios, controleNomedoArquivo.text);
 
     //compartilhar
     compartilhador(file);
@@ -330,7 +330,8 @@ class _telaFios extends State<telaFios> {
     }
   }
 
-  Future<File> criarPDF(List<objeto> listaStrings, String nomeArquivo) async {
+  Future<File> criarPDFFios(
+      List<objeto> listaStrings, String nomeArquivo) async {
     //Criar novo PDF document
     PdfDocument document = PdfDocument();
 
