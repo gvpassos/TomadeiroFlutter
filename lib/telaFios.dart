@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:tomadeiro/compartilhar.dart';
 
 class Fios extends objeto {
@@ -10,16 +12,17 @@ class Fios extends objeto {
   Fios(this.cor, this.diametro, this.tipo, this.quant);
 
   String nomeExibicao() {
-    return 'Cabo Flexivel de ${diametro}mm ${cor}';
-  }
-  String nomeExibicaoCompleto() {
-    String plural = quant > 1 ? '${tipo}s' : tipo;
-    return '${nomeExibicao()}: $quant $plural';
-  }
-  String gerarQuant(){
-    return '${quant.toString()} ${quant > 1 ? '${tipo}s' : tipo }';
+    return 'Cabo Flexivel de ${diametro}mm $cor';
   }
 
+  String nomeExibicaoCompleto() {
+    String plural = quant > 1 ? '${tipo}s' : tipo;
+    return '${nomeExibicao()}: $quant $plural ';
+  }
+
+  String gerarQuant() {
+    return '${quant.toString()} ${quant > 1 ? '${tipo}s' : tipo}';
+  }
 }
 
 class telaFios extends StatefulWidget {
@@ -77,7 +80,6 @@ class _telaFios extends State<telaFios> {
   bool teraIsolante = false;
   @override
   Widget build(BuildContext context) {
-
     return Column(children: [
       //Menu para cadastrar o fio
       Row(children: [
@@ -225,19 +227,17 @@ class _telaFios extends State<telaFios> {
         clipBehavior: Clip.hardEdge,
         child: SingleChildScrollView(child: carregarFios()),
       ),
-    Row(
-      children:[ Checkbox(
-          checkColor: Colors.white,
-          value: teraIsolante,
+      Row(children: [
+        Checkbox(
+            checkColor: Colors.white,
+            value: teraIsolante,
             onChanged: (bool? value) {
               setState(() {
                 teraIsolante = value!;
               });
-            }
-        ),
+            }),
         incluirIsolante()
-      ]
-    ),
+      ]),
       Container(
           margin: const EdgeInsets.all(20.0),
           child: ElevatedButton(
@@ -268,9 +268,9 @@ class _telaFios extends State<telaFios> {
 
   diminiurQuant(int pos) {
     /// diminuir a Quantidade de fios ao tocar no item
-    if(listaFios[pos].quant > 1){
+    if (listaFios[pos].quant > 1) {
       listaFios[pos].quant--;
-    }else {
+    } else {
       listaFios.removeAt(pos);
     }
   }
@@ -309,8 +309,8 @@ class _telaFios extends State<telaFios> {
     listaFios.clear();
   }
 
-  Widget incluirIsolante(){
-    if(teraIsolante){
+  Widget incluirIsolante() {
+    if (teraIsolante) {
       return Container(
         padding: const EdgeInsets.only(left: 20),
         width: 80,
@@ -320,7 +320,7 @@ class _telaFios extends State<telaFios> {
           keyboardType: TextInputType.number,
         ),
       );
-    }else {
+    } else {
       return Container(
         padding: const EdgeInsets.only(left: 20),
         width: 180,
@@ -328,5 +328,79 @@ class _telaFios extends State<telaFios> {
         child: const Text('incluir isolante'),
       );
     }
+  }
+
+  Future<File> criarPDF(List<objeto> listaStrings, String nomeArquivo) async {
+    //Criar novo PDF document
+    PdfDocument document = PdfDocument();
+
+    //Criar a PdfGrid
+    PdfGrid grid = PdfGrid();
+
+    //Adicionando as cabeçalho para o grid
+    grid.columns.add(count: 2);
+    grid.columns[0].width = 400;
+    grid.columns[0].format = PdfStringFormat(
+        alignment: PdfTextAlignment.center,
+        lineAlignment: PdfVerticalAlignment.bottom);
+
+    grid.columns[1].format = PdfStringFormat(
+        alignment: PdfTextAlignment.center,
+        lineAlignment: PdfVerticalAlignment.bottom);
+
+    //Adicionando as cabeçalho para o grid
+    grid.headers.add(1);
+    PdfGridRow header = grid.headers[0];
+    header.cells[0].value = 'Nome';
+    header.cells[1].value = 'Quant.';
+
+    //configurando o style do cabeçalho
+    header.style = PdfGridCellStyle(
+      cellPadding: PdfPaddings(left: 2, right: 3, top: 4, bottom: 5),
+      backgroundBrush: PdfBrushes.dimGray,
+      textBrush: PdfBrushes.black,
+      font: PdfStandardFont(PdfFontFamily.timesRoman, 30,
+          style: PdfFontStyle.bold),
+    );
+
+    //Adicionando as Linhas para o grid
+    for (int cont = 0; cont < listaStrings.length; cont++) {
+      //configurando o style
+      PdfBrush corLinha =
+          cont % 2 == 0 ? PdfBrushes.white : PdfBrushes.lightGray;
+
+      grid.style = PdfGridStyle(
+          cellPadding: PdfPaddings(left: 2, right: 2, top: 4, bottom: 5),
+          backgroundBrush: corLinha,
+          textBrush: PdfBrushes.black,
+          font: PdfStandardFont(PdfFontFamily.timesRoman, 25));
+
+      PdfGridRow row = grid.rows.add();
+      row.cells[0].value = listaStrings[cont].nomeExibicao();
+      row.cells[1].value = listaStrings[cont].gerarQuant();
+    }
+
+    if (teraIsolante) {
+      PdfGridRow row = grid.rows.add();
+      row.cells[0].value = 'Isolante de 20 Metros';
+      row.cells[1].value =
+          '${isolanteControle.text} Unidade${isolanteControle.text == '1' ? '' : 's'}';
+    }
+    //desenhar a tabela
+    grid.draw(
+        page: document.pages.add(), bounds: const Rect.fromLTWH(0, 0, 0, 0));
+
+    //Salvar o documento
+    List<int> bytes = await document.save();
+    final directory = await getApplicationDocumentsDirectory();
+
+    File file = File(
+        '${directory.path}/$nomeArquivo.pdf'); // Local onde sera salvo o documento
+    await file.writeAsBytes(bytes, flush: true);
+
+    /// armazenar na memoria
+    document.dispose();
+
+    return file;
   }
 }

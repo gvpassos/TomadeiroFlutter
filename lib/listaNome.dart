@@ -47,37 +47,35 @@ List<nomesModulos> listaNomes = [
 
 // Interruptor Simples 1 Tecla e Tomada Dupla conjugada
   nomesModulos('Interruptor Simples 1 Tecla e Tomada Dupla conjugada',
-      ['Interruptor', 'Tomada' ,'Tomada']),
+      ['Interruptor', 'Tomada', 'Tomada']),
   nomesModulos('Interruptor Simples 1 Tecla e Tomada Dupla conjugada',
-      ['Tomada', 'Interruptor','Tomada']),
+      ['Tomada', 'Interruptor', 'Tomada']),
   nomesModulos('Interruptor Simples 1 Tecla e Tomada Dupla conjugada',
-      ['Tomada','Tomada', 'Interruptor']),
+      ['Tomada', 'Tomada', 'Interruptor']),
 
 // Interruptor Paralelo 1 Tecla e Tomada Dupla conjugada
   nomesModulos('Interruptor Paralelo 1 Tecla e Tomada Dupla conjugada',
-      ['Interruptor Paralelo', 'Tomada' ,'Tomada']),
+      ['Interruptor Paralelo', 'Tomada', 'Tomada']),
   nomesModulos('Interruptor Simples 1 Tecla e Tomada Dupla conjugada',
-      ['Tomada', 'Interruptor Paralelo','Tomada']),
+      ['Tomada', 'Interruptor Paralelo', 'Tomada']),
   nomesModulos('Interruptor Simples 1 Tecla e Tomada Dupla conjugada',
-      ['Tomada','Tomada', 'Interruptor Paralelo']),
-
+      ['Tomada', 'Tomada', 'Interruptor Paralelo']),
 
 // Interruptor Simples 1 Tecla e Tomada 20A Dupla conjugada
   nomesModulos('Interruptor Simples 1 Tecla e Tomada 20A Dupla conjugada',
-      ['Interruptor', 'Tomada 20A' ,'Tomada 20A']),
+      ['Interruptor', 'Tomada 20A', 'Tomada 20A']),
   nomesModulos('Interruptor Simples 1 Tecla e Tomada 20A Dupla conjugada',
-      ['Tomada 20A', 'Interruptor','Tomada 20A']),
+      ['Tomada 20A', 'Interruptor', 'Tomada 20A']),
   nomesModulos('Interruptor Simples 1 Tecla e Tomada 20A Dupla conjugada',
-      ['Tomada 20A','Tomada 20A', 'Interruptor']),
+      ['Tomada 20A', 'Tomada 20A', 'Interruptor']),
 
 // Interruptor Paralelo 1 Tecla e Tomada Dupla conjugada
   nomesModulos('Interruptor Paralelo 1 Tecla e Tomada 20A Dupla conjugada',
-      ['Interruptor Paralelo', 'Tomada 20A' ,'Tomada 20A']),
+      ['Interruptor Paralelo', 'Tomada 20A', 'Tomada 20A']),
   nomesModulos('Interruptor Simples 1 Tecla e Tomada 20A Dupla conjugada',
-      ['Tomada 20A', 'Interruptor Paralelo','Tomada 20A']),
+      ['Tomada 20A', 'Interruptor Paralelo', 'Tomada 20A']),
   nomesModulos('Interruptor Simples 1 Tecla e Tomada 20A Dupla conjugada',
-      ['Tomada 20A','Tomada 20A', 'Interruptor Paralelo']),
-
+      ['Tomada 20A', 'Tomada 20A', 'Interruptor Paralelo']),
 
 // Interruptor Simples 1 Paralelo e Tomada Simples conjugada
   nomesModulos('Interruptor Paralelo 1 Tecla e Tomada Simples conjugada',
@@ -89,7 +87,7 @@ List<nomesModulos> listaNomes = [
   nomesModulos('Interruptor Simples 2 Teclas e Tomada Simples conjugada',
       ['Interruptor', 'Interruptor', 'Tomada']),
   nomesModulos('Interruptor Simples 2 Teclas e Tomada Simples conjugada',
-      ['Interruptor', 'Tomada', 'interruptor']),
+      ['Interruptor', 'Tomada', 'Interruptor']),
   nomesModulos('Interruptor Simples 2 Teclas e Tomada Simples conjugada',
       ['Tomada', 'Interruptor', 'Interruptor']),
 
@@ -127,44 +125,44 @@ List<nomesModulos> listaNomes = [
   ),
   nomesModulos(
       'Interruptor Paralelo 2 Teclas e Interruptor Simples 1 Tecla conjugada',
-      ['Interruptor Paralelo', 'interruptor', 'Interruptor Paralelo']),
+      ['Interruptor Paralelo', 'Interruptor', 'Interruptor Paralelo']),
   nomesModulos(
       'Interruptor Paralelo 2 Teclas e Interruptor Simples 1 Tecla conjugada',
-      ['interruptor', 'Interruptor Paralelo', 'Interruptor Paralelo']),
+      ['Interruptor', 'Interruptor Paralelo', 'Interruptor Paralelo']),
 
   //Interruptor Paralelo 2 Teclas e Interruptor Simples 1 Tecla conjugada
   nomesModulos(
       'Interruptor Paralelo 2 Teclas e Interruptor Simples 1 Tecla conjugada',
-      ['Interruptor Paralelo', 'Interruptor Paralelo', 'interruptor']),
+      ['Interruptor Paralelo', 'Interruptor Paralelo', 'Interruptor']),
   nomesModulos(
       'Interruptor Paralelo 2 Teclas e Interruptor Simples 1 Tecla conjugada',
-      ['Interruptor Paralelo', 'interruptor', 'Interruptor Paralelo']),
+      ['Interruptor Paralelo', 'Interruptor', 'Interruptor Paralelo']),
   nomesModulos(
       'Interruptor Paralelo 2 Teclas e Interruptor Simples 1 Tecla conjugada',
-      ['interruptor', 'Interruptor Paralelo', 'Interruptor Paralelo']),
+      ['Interruptor', 'Interruptor Paralelo', 'Interruptor Paralelo']),
 
 //Interruptor Paralelo 1 Tecla, Interruptor Simples 1 Tecla e Tomada conjugada
   nomesModulos(
       'Interruptor Paralelo 1 Tecla, Interruptor Simples 1 Tecla e Tomada conjugada',
-      ['Interruptor Paralelo', 'interruptor', 'Tomada']),
+      ['Interruptor Paralelo', 'Interruptor', 'Tomada']),
   nomesModulos(
       'Interruptor Paralelo 1 Tecla, Interruptor Simples 1 Tecla e Tomada conjugada',
-      ['Interruptor Paralelo', 'Tomada', 'interruptor']),
+      ['Interruptor Paralelo', 'Tomada', 'Interruptor']),
   nomesModulos(
       'Interruptor Paralelo 1 Tecla, Interruptor Simples 1 Tecla e Tomada conjugada',
-      ['interruptor', 'Interruptor Paralelo', 'Tomada']),
+      ['Interruptor', 'Interruptor Paralelo', 'Tomada']),
 
   nomesModulos(
       'Interruptor Paralelo 1 Tecla, Interruptor Simples 1 Tecla e Tomada conjugada',
-      ['interruptor', 'Tomada', 'Interruptor Paralelo']),
+      ['Interruptor', 'Tomada', 'Interruptor Paralelo']),
 
   nomesModulos(
       'Interruptor Paralelo 1 Tecla, Interruptor Simples 1 Tecla e Tomada conjugada',
-      ['Tomada', 'interruptor', 'Interruptor Paralelo']),
+      ['Tomada', 'Interruptor', 'Interruptor Paralelo']),
 
   nomesModulos(
       'Interruptor Paralelo 1 Tecla, Interruptor Simples 1 Tecla e Tomada conjugada',
-      ['Tomada', 'Interruptor Paralelo', 'interruptor']),
+      ['Tomada', 'Interruptor Paralelo', 'Interruptor']),
 
 //Tomada Simples e Tomada 20A conjugada
   nomesModulos(
@@ -174,9 +172,9 @@ List<nomesModulos> listaNomes = [
 
 //Interruptor simples e Tomada 20A conjugada
   nomesModulos('Interruptor Simples e Tomada 20A conjugada',
-      ['Tomada20A', 'interruptor']),
+      ['Tomada20A', 'Interruptor']),
   nomesModulos('Interruptor Simples e Tomada 20A conjugada',
-      ['interruptor', 'Tomada20A']),
+      ['Interruptor', 'Tomada20A']),
 
 //Interruptor Interruptor Paralelo e Tomada 20A conjugada
   nomesModulos('Interruptor Interruptor Paralelo e Tomada 20A conjugada',
@@ -187,23 +185,23 @@ List<nomesModulos> listaNomes = [
 
 //Interruptor Simples 2 Teclas e Tomada 20A
   nomesModulos('Interruptor Simples 2 Teclas e Tomada 20A conjugada',
-      ['interruptor', 'interruptor', 'Tomada20A']),
+      ['Interruptor', 'Interruptor', 'Tomada20A']),
 
   nomesModulos('Interruptor Simples 2 Teclas e Tomada 20A conjugada',
-      ['interruptor', 'Tomada20A', 'interruptor']),
+      ['Interruptor', 'Tomada20A', 'Interruptor']),
 
   nomesModulos('Interruptor Simples 2 Teclas e Tomada 20A conjugada',
-      ['Tomada20A', 'interruptor', 'interruptor']),
+      ['Tomada20A', 'Interruptor', 'Interruptor']),
 //Interruptor Paralelo 2 Teclas e Tomada 20A
 
   nomesModulos('Interruptor Paralelo 2 Teclas e Tomada 20A conjugada',
-      ['interruptor', 'interruptor', 'Tomada20A']),
+      ['Interruptor', 'Interruptor', 'Tomada20A']),
 
   nomesModulos('Interruptor Paralelo 2 Teclas e Tomada 20A conjugada',
-      ['interruptor', 'Tomada20A', 'interruptor']),
+      ['Interruptor', 'Tomada20A', 'Interruptor']),
 
   nomesModulos('Interruptor Paralelo 2 Teclas e Tomada 20A conjugada',
-      ['Tomada20A', 'interruptor', 'interruptor']),
+      ['Tomada20A', 'Interruptor', 'Interruptor']),
 
 //Tampa cega
   nomesModulos('Tampa Cega', ['Tampa Cega', 'Tampa Cega', 'Tampa Cega']),

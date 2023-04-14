@@ -1,7 +1,7 @@
-import 'dart:io';
+import 'dart:io' show File;
 
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
+import 'package:collection/collection.dart' show ListEquality;
 import 'package:tomadeiro/compartilhar.dart';
 
 import 'listaNome.dart';
@@ -28,9 +28,11 @@ class ponto extends objeto {
   String nomeExibicao() {
     return '$nome';
   }
-  String gerarQuant(){
-    return "${quant.toString()} ${quant >1 ? 'Unidades' : 'Unidade' }";
+
+  String gerarQuant() {
+    return "${quant.toString()} ${quant > 1 ? 'Unidades' : 'Unidade'}";
   }
+
   String nomeQuantExibicao() {
     return '$nome : ${gerarQuant()}';
   }

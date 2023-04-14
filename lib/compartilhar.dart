@@ -11,6 +11,7 @@ class objeto {
   String nomeExibicao() {
     return "Nome do Objeto";
   }
+
   String gerarQuant() {
     return "Quant do Objeto";
   }
@@ -92,7 +93,7 @@ Future<File> criarPDF(List<objeto> listaStrings, String nomeArquivo) async {
 
     PdfGridRow row = grid.rows.add();
     row.cells[0].value = listaStrings[cont].nomeExibicao();
-    row.cells[1].value = listaStrings[cont].gerarQuant();
+    row.cells[1].value = '${listaStrings[cont].gerarQuant()} Unidades';
   }
 
   //desenhar a tabela
