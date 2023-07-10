@@ -1,5 +1,4 @@
-import 'dart:ffi';
-import 'dart:io';
+import 'dart:io' show Directory, File, FileSystemEntity;
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -119,7 +118,7 @@ class _telaHistorico extends State<telaHistorico> {
 
     if (isExists) {
       final url = Uri.file(path);
-      await launchUrl(url );
+      await launchUrl(url);
     } else {
       // Handle file not exists error
     }

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' show File;
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,6 +11,7 @@ class Fios extends objeto {
 
   Fios(this.cor, this.diametro, this.tipo, this.quant);
 
+  @override
   String nomeExibicao() {
     return 'Cabo Flexivel de ${diametro}mm $cor';
   }
@@ -20,6 +21,7 @@ class Fios extends objeto {
     return '${nomeExibicao()}: $quant $plural ';
   }
 
+  @override
   String gerarQuant() {
     return '${quant.toString()} ${quant > 1 ? '${tipo}s' : tipo}';
   }
@@ -249,7 +251,6 @@ class _telaFios extends State<telaFios> {
     List<TextButton> exibirFios = [];
     for (var cont = 0; cont < listaFios.length; cont++) {
       var element = listaFios[cont];
-      var plural = element.quant > 1 ? 's' : '';
       exibirFios.add(TextButton(
           onPressed: () {
             setState(() {

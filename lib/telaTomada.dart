@@ -30,11 +30,11 @@ class ponto extends objeto {
   }
 
   String gerarQuant() {
-    return "${quant.toString()} ${quant > 1 ? 'Unidades' : 'Unidade'}";
+    return quant.toString();
   }
 
   String nomeQuantExibicao() {
-    return '$nome : ${gerarQuant()}';
+    return '$nome : ${gerarQuant()} unidades';
   }
 }
 
