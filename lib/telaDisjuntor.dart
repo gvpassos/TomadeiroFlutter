@@ -6,12 +6,15 @@ import 'compartilhar.dart';
 
 class disjuntor extends objeto {
   String polar, amper;
+  @override
   int quant;
   disjuntor(this.polar, this.amper, this.quant);
 
+  @override
   String nomeExibicao() {
     return 'Disjuntor $polar de $amper Amperes';
   }
+  @override
   String gerarQuant(){
     return quant.toString();
   }
@@ -56,6 +59,7 @@ class _telaDisjuntor extends State<telaDisjuntor> {
   //Controle para recuperar o nome do alert
   TextEditingController controleNomedoArquivo = TextEditingController();
 
+  @override
   Widget build(BuildContext context) {
     return Column(children: [
       /// Menu para cadastrar o Dijuntor
@@ -227,7 +231,7 @@ class _telaDisjuntor extends State<telaDisjuntor> {
           onPressed: diminiurQuant(cont),
           child: Text(
             aux,
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
           )));
     }
     return Column(

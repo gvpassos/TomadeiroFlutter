@@ -21,7 +21,7 @@ class telaHistorico extends StatefulWidget {
 class _telaHistorico extends State<telaHistorico> {
   late String directory;
   List file = [];
-  MediaQueryData responsive = MediaQueryData();
+  MediaQueryData responsive = const MediaQueryData();
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +29,11 @@ class _telaHistorico extends State<telaHistorico> {
 
     return Column(children: [
       Container(
-        margin: EdgeInsets.all(15),
+        margin: const EdgeInsets.all(15),
         width: 400,
         height: 390,
         decoration: BoxDecoration(
-          border: Border.all(color: Color.fromARGB(255, 73, 122, 146)),
+          border: Border.all(color: const Color.fromARGB(255, 73, 122, 146)),
           borderRadius: const BorderRadius.all(Radius.circular(15)),
         ),
         child: SingleChildScrollView(
@@ -68,7 +68,7 @@ class _telaHistorico extends State<telaHistorico> {
                     width: 0.80, color: Color.fromARGB(255, 73, 122, 146)))),
         child: Row(
           children: [
-            Container(
+            SizedBox(
               width: 225,
               child: TextButton(
                 /// Arquivo Armazenado na memoria

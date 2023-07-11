@@ -26,9 +26,10 @@ class ponto extends objeto {
 
   @override
   String nomeExibicao() {
-    return '$nome';
+    return nome;
   }
 
+  @override
   String gerarQuant() {
     return quant.toString();
   }

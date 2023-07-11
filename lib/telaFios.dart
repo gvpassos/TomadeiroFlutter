@@ -7,6 +7,7 @@ import 'package:tomadeiro/compartilhar.dart';
 
 class Fios extends objeto {
   String cor, diametro, tipo;
+  @override
   int quant;
 
   Fios(this.cor, this.diametro, this.tipo, this.quant);
@@ -86,17 +87,17 @@ class _telaFios extends State<telaFios> {
       //Menu para cadastrar o fio
       Row(children: [
         Container(
-            padding: EdgeInsets.only(top: 9),
+            padding: const EdgeInsets.only(top: 9),
             width: 89,
             alignment: Alignment.bottomCenter,
             child: const Text("Cor:")),
         Container(
-            padding: EdgeInsets.only(top: 9),
+            padding: const EdgeInsets.only(top: 9),
             width: 80,
             alignment: Alignment.bottomCenter,
             child: const Text("Diametro:")),
         Container(
-            padding: EdgeInsets.only(top: 9),
+            padding: const EdgeInsets.only(top: 9),
             width: 100,
             alignment: Alignment.bottomCenter,
             child: const Text("Quantidade:")),
@@ -106,7 +107,7 @@ class _telaFios extends State<telaFios> {
           Container(
             width: 95,
             alignment: Alignment.topCenter,
-            padding: EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 10),
             child: DropdownButton<String>(
               value: corValor,
               icon: const Icon(Icons.arrow_downward),
@@ -158,7 +159,7 @@ class _telaFios extends State<telaFios> {
           ),
           Container(
             // TIPO DE QUANTIDADE
-            padding: EdgeInsets.only(left: 5),
+            padding: const EdgeInsets.only(left: 5),
             width: 90,
             alignment: Alignment.topCenter,
             child: DropdownButton<String>(
