@@ -61,12 +61,17 @@ class telaTomada extends StatefulWidget {
 class _telaTomada extends State<telaTomada> {
   //armazena o ultimo ponto para exibir em um alinha no final da tela
   ponto ultimo = ponto(['Lista Vazia']);
+
   TextEditingController controleNomedoArquivo = TextEditingController();
+  TextEditingController anotacaoControle = TextEditingController();
+
+  bool teraAnotacao = false;
 
   @override
   Widget build(BuildContext context) {
     MediaQueryData responsive;
     responsive = MediaQuery.of(context);
+
     return Column(children: [
       Row(
         children: <Widget>[
@@ -200,6 +205,17 @@ class _telaTomada extends State<telaTomada> {
           )
         ],
       ),
+      Row(children: [
+        Checkbox(
+            checkColor: Colors.white,
+            value: teraAnotacao,
+            onChanged: (bool? value) {
+              setState(() {
+                teraAnotacao = value!;
+              });
+            }),
+        incluirAnotacao()
+      ]),
       Row(
         children: [
           SizedBox(
@@ -360,12 +376,51 @@ class _telaTomada extends State<telaTomada> {
   compartilharLista() async {
     await obterNome(context,
         controleNomedoArquivo); //Chama um dialogo para cadastrar o nome do arquivo
-
-    File pdf = await criarPDF(listaPontos, controleNomedoArquivo.text);
+    String anotacao = teraAnotacao ? anotacaoControle.text : "";
+    File pdf =
+        await criarPDF(listaPontos, controleNomedoArquivo.text, anotacao);
 
     compartilhador(pdf);
     listaPontos.clear();
   }
 
-//Input para pegar o nome do Arquivo usando na funcao de compartilhamento
+  Widget incluirAnotacao() {
+    if (teraAnotacao) {
+      return Container(
+        padding: const EdgeInsets.only(left: 20),
+        width: 300,
+        height: 30,
+        child: TextField(
+          onTap: () => {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                      title: const Text('Digite a anotação !'),
+                      content: TextField(
+                        controller: anotacaoControle,
+                        keyboardType: TextInputType.text,
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Ok')),
+                      ]);
+                })
+          },
+          controller: anotacaoControle,
+          keyboardType: TextInputType.text,
+        ),
+      );
+    } else {
+      return Container(
+        padding: const EdgeInsets.only(left: 20),
+        width: 180,
+        height: 30,
+        child: const Text('incluir Anotação'),
+      );
+    }
+  }
 }

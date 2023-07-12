@@ -39,6 +39,7 @@ class AppBarExample extends StatelessWidget {
       initialIndex: 0,
       length: abas.length,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Criador de Listas para Eletricistas'),
           notificationPredicate: (ScrollNotification notification) {
@@ -70,7 +71,7 @@ class AppBarExample extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: <Widget>[abas[0], abas[1], abas[2], abas[3]],
+          children: abas,
         ),
       ),
     );

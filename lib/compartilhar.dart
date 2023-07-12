@@ -46,7 +46,8 @@ Future<void> obterNome(
       });
 }
 
-Future<File> criarPDF(List<objeto> listaStrings, String nomeArquivo) async {
+Future<File> criarPDF(
+    List<objeto> listaStrings, String nomeArquivo, String anotacao) async {
   //Criar novo PDF document
   PdfDocument document = PdfDocument();
 
@@ -93,6 +94,20 @@ Future<File> criarPDF(List<objeto> listaStrings, String nomeArquivo) async {
     PdfGridRow row = grid.rows.add();
     row.cells[0].value = listaStrings[cont].nomeExibicao();
     row.cells[1].value = '${listaStrings[cont].gerarQuant()} Unidades';
+  }
+
+  if (anotacao != "") {
+    PdfBrush corLinha =
+        listaStrings.length % 2 == 0 ? PdfBrushes.white : PdfBrushes.lightGray;
+    grid.style = PdfGridStyle(
+        cellPadding: PdfPaddings(left: 2, right: 2, top: 4, bottom: 5),
+        backgroundBrush: corLinha,
+        textBrush: PdfBrushes.black,
+        font: PdfStandardFont(PdfFontFamily.timesRoman, 25));
+
+    PdfGridRow row = grid.rows.add();
+    row.cells[1].rowSpan = 2;
+    row.cells[0].value = anotacao;
   }
 
   //desenhar a tabela

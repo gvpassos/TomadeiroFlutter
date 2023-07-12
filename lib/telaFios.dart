@@ -78,9 +78,11 @@ class _telaFios extends State<telaFios> {
   //Controle para recuperar o nome do alert
   TextEditingController controleNomedoArquivo = TextEditingController();
   TextEditingController isolanteControle = TextEditingController();
+  TextEditingController anotacaoControle = TextEditingController();
 
   //Incluir Isolante
   bool teraIsolante = false;
+  bool teraAnotacao = false;
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -226,7 +228,7 @@ class _telaFios extends State<telaFios> {
           borderRadius: const BorderRadius.all(Radius.circular(15)),
         ),
         width: 500.0,
-        height: 230.0,
+        height: 180.0,
         clipBehavior: Clip.hardEdge,
         child: SingleChildScrollView(child: carregarFios()),
       ),
@@ -240,6 +242,17 @@ class _telaFios extends State<telaFios> {
               });
             }),
         incluirIsolante()
+      ]),
+      Row(children: [
+        Checkbox(
+            checkColor: Colors.white,
+            value: teraAnotacao,
+            onChanged: (bool? value) {
+              setState(() {
+                teraAnotacao = value!;
+              });
+            }),
+        incluirAnotacao()
       ]),
       Container(
           margin: const EdgeInsets.all(20.0),
@@ -315,11 +328,30 @@ class _telaFios extends State<telaFios> {
     if (teraIsolante) {
       return Container(
         padding: const EdgeInsets.only(left: 20),
-        width: 80,
+        width: 300,
         height: 30,
         child: TextField(
+          onTap: () => {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                      title: const Text('Digite a quantidade de isolante !'),
+                      content: TextField(
+                        controller: isolanteControle,
+                        keyboardType: TextInputType.text,
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Ok')),
+                      ]);
+                })
+          },
           controller: isolanteControle,
-          keyboardType: TextInputType.number,
+          keyboardType: TextInputType.text,
         ),
       );
     } else {
@@ -328,6 +360,46 @@ class _telaFios extends State<telaFios> {
         width: 180,
         height: 30,
         child: const Text('incluir isolante'),
+      );
+    }
+  }
+
+  Widget incluirAnotacao() {
+    if (teraAnotacao) {
+      return Container(
+        padding: const EdgeInsets.only(left: 20),
+        width: 300,
+        height: 30,
+        child: TextField(
+          onTap: () => {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                      title: const Text('Digite a anotação !'),
+                      content: TextField(
+                        controller: anotacaoControle,
+                        keyboardType: TextInputType.text,
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Ok')),
+                      ]);
+                })
+          },
+          controller: anotacaoControle,
+          keyboardType: TextInputType.text,
+        ),
+      );
+    } else {
+      return Container(
+        padding: const EdgeInsets.only(left: 20),
+        width: 180,
+        height: 30,
+        child: const Text('incluir Anotação'),
       );
     }
   }

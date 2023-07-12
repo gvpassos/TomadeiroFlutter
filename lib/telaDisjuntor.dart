@@ -14,8 +14,9 @@ class disjuntor extends objeto {
   String nomeExibicao() {
     return 'Disjuntor $polar de $amper Amperes';
   }
+
   @override
-  String gerarQuant(){
+  String gerarQuant() {
     return quant.toString();
   }
 }
@@ -58,6 +59,9 @@ class _telaDisjuntor extends State<telaDisjuntor> {
 
   //Controle para recuperar o nome do alert
   TextEditingController controleNomedoArquivo = TextEditingController();
+  TextEditingController anotacaoControle = TextEditingController();
+
+  bool teraAnotacao = false;
 
   @override
   Widget build(BuildContext context) {
@@ -184,10 +188,21 @@ class _telaDisjuntor extends State<telaDisjuntor> {
           borderRadius: const BorderRadius.all(Radius.circular(15)),
         ),
         width: 500.0,
-        height: 250.0,
+        height: 180.0,
         clipBehavior: Clip.hardEdge,
         child: SingleChildScrollView(child: carregarDisjuntores()),
       ),
+      Row(children: [
+        Checkbox(
+            checkColor: Colors.white,
+            value: teraAnotacao,
+            onChanged: (bool? value) {
+              setState(() {
+                teraAnotacao = value!;
+              });
+            }),
+        incluirAnotacao()
+      ]),
       Container(
           margin: const EdgeInsets.all(20.0),
           child: ElevatedButton(
@@ -250,11 +265,53 @@ class _telaDisjuntor extends State<telaDisjuntor> {
         controleNomedoArquivo); //Chama um dialogo para cadastrar o nome do arquivo
 
     //Criar PDF
+    String anotacao = teraAnotacao ? anotacaoControle.text : '';
     if (controleNomedoArquivo.text.isNotEmpty) {}
-    File file = await criarPDF(listaDisjuntores, controleNomedoArquivo.text);
+    File file =
+        await criarPDF(listaDisjuntores, controleNomedoArquivo.text, anotacao);
 
     //compartilhar
     compartilhador(file);
     listaDisjuntores.clear();
+  }
+
+  Widget incluirAnotacao() {
+    if (teraAnotacao) {
+      return Container(
+        padding: const EdgeInsets.only(left: 20),
+        width: 300,
+        height: 30,
+        child: TextField(
+          onTap: () => {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                      title: const Text('Digite a anotação !'),
+                      content: TextField(
+                        controller: anotacaoControle,
+                        keyboardType: TextInputType.text,
+                      ),
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Ok')),
+                      ]);
+                })
+          },
+          controller: anotacaoControle,
+          keyboardType: TextInputType.text,
+        ),
+      );
+    } else {
+      return Container(
+        padding: const EdgeInsets.only(left: 20),
+        width: 180,
+        height: 30,
+        child: const Text('incluir Anotação'),
+      );
+    }
   }
 }
