@@ -95,7 +95,7 @@ Future<File> criarPDF(
     row.cells[0].value = listaStrings[cont].nomeExibicao();
     row.cells[1].value = '${listaStrings[cont].gerarQuant()} Unidades';
   }
-
+  //// ADicionar anotacoes ////////////
   if (anotacao != "") {
     PdfBrush corLinha =
         listaStrings.length % 2 == 0 ? PdfBrushes.white : PdfBrushes.lightGray;
@@ -106,7 +106,7 @@ Future<File> criarPDF(
         font: PdfStandardFont(PdfFontFamily.timesRoman, 25));
 
     PdfGridRow row = grid.rows.add();
-    row.cells[1].rowSpan = 2;
+    row.cells[0].columnSpan = 2;
     row.cells[0].value = anotacao;
   }
 

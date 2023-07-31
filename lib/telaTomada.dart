@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io' show File;
 
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart'
     show DeepCollectionEquality, ListEquality;
+import 'package:flutter/services.dart';
 import 'package:tomadeiro/compartilhar.dart';
 
 import 'listaNome.dart';
@@ -249,6 +251,9 @@ class _telaTomada extends State<telaTomada> {
         ],
       ),
       ultimodaLista(),
+      TextButton(
+          onPressed: mostraListaCompleta,
+          child: const Text("Ver Lista Completa"))
     ]);
   }
 
@@ -379,6 +384,7 @@ class _telaTomada extends State<telaTomada> {
     await obterNome(context,
         controleNomedoArquivo); //Chama um dialogo para cadastrar o nome do arquivo
     String anotacao = teraAnotacao ? anotacaoControle.text : "";
+
     File pdf =
         await criarPDF(listaPontos, controleNomedoArquivo.text, anotacao);
 
@@ -424,5 +430,83 @@ class _telaTomada extends State<telaTomada> {
         child: const Text('incluir Anotação'),
       );
     }
+  }
+
+  mostraListaCompleta() {
+    int seletedIndex = -1;
+    TextEditingController inputSeletedItem = TextEditingController();
+    CustomScrollView templista = CustomScrollView(
+      slivers: <Widget>[
+        SliverList(
+            delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            return Container(
+              alignment: Alignment.center,
+              color: index % 2 == 0 ? Colors.grey : Colors.white,
+              height: 80,
+              padding: const EdgeInsets.all(1),
+              child: TextButton(
+                onPressed: () => {
+                  inputSeletedItem.text =
+                      listaPontos.elementAt(index).nomeQuantExibicao(),
+                  seletedIndex = index
+                },
+                child: Text(listaPontos.elementAt(index).nomeQuantExibicao()),
+              ),
+            );
+          },
+          childCount: listaPontos.length,
+        ))
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: const Text('Lista Completa'),
+              content: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 2)),
+                width: 280,
+                height: 580,
+                child: templista,
+              ),
+              actions: [
+                TextField(
+                  controller: inputSeletedItem,
+                  enabled: false,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                        // MENOS 1 funcao
+                        onPressed: () {
+                          if (seletedIndex == -1) return;
+                          listaPontos.elementAt(seletedIndex).quant -= 1;
+                          inputSeletedItem.text = listaPontos
+                              .elementAt(seletedIndex)
+                              .nomeQuantExibicao();
+                        },
+                        icon: const Icon(Icons.exposure_minus_1)),
+                    IconButton(
+                        //MAIS  1 funcao
+                        onPressed: () {
+                          if (seletedIndex == -1) return;
+                          listaPontos.elementAt(seletedIndex).quant += 1;
+                          inputSeletedItem.text = listaPontos
+                              .elementAt(seletedIndex)
+                              .nomeQuantExibicao();
+                        },
+                        icon: const Icon(Icons.plus_one)),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Ok')),
+                  ],
+                ),
+              ]);
+        });
   }
 }
