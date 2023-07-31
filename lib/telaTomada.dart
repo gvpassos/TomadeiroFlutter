@@ -1,7 +1,8 @@
 import 'dart:io' show File;
 
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart' show ListEquality;
+import 'package:collection/collection.dart'
+    show DeepCollectionEquality, ListEquality;
 import 'package:tomadeiro/compartilhar.dart';
 
 import 'listaNome.dart';
@@ -354,9 +355,10 @@ class _telaTomada extends State<telaTomada> {
   // Limpar o array modulo
   adicionarPonto() {
     bool novaentrada = true;
+    Function unOrdDeepEq = const DeepCollectionEquality.unordered().equals;
     if (listaPontos.isNotEmpty) {
       for (var p in listaPontos) {
-        if (const ListEquality().equals(p.modulos, modulos)) {
+        if (unOrdDeepEq(p.modulos, modulos)) {
           p.quant++;
           novaentrada = false;
           ultimo = p;
